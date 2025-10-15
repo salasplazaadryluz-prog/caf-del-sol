@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Iniciar sesión - Café</title>
+  <link href="css/styles.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="phone">
+    <section class="top">
+      <div class="contenedor-principal">
+      <div class="logo-container">
+        <img src="images/cafe del sol.png" alt="logo" />
+      </div>
+      </div>
+      <div class="beans">
+        <img src="images/coffee.png" alt="coffee" />
+      </div>
+      
+    </section>
+
+    <section class="card">
+      <h1>¡Bienvenido!</h1>
+
+      <form action="/login" method="POST" class="form">
+        <label class="input-pill">
+          <span class="icon">✉️</span>
+          <input name="email" type="email" placeholder="hola@sitioincreible.com" required />
+        </label>
+
+        <label class="input-pill">
+          <span class="icon">🔑</span>
+          <input id="password" name="password" type="password" placeholder="Contraseña" required />
+        </label>
+
+        <div class="actions">
+          <a class="link-small" href="#">¿Olvidaste tu contraseña?</a>
+          <button class="btn-primary" type="submit">Iniciar sesión</button>
+        </div>
+      </form>
+
+      <p class="small">¿Aún no tienes una cuenta? <a href="/register">Únete aquí</a></p>
+    </section>
+  </main>
+</body>
+</html>

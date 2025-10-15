@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crear cuenta - Café</title>
+  <link href="css/styles.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="phone">
+    <section class="card create">
+      <h1>CREAR CUENTA</h1>
+
+      <form action="/register" method="POST" class="form">
+        <input name="name" placeholder="Nombre completo" required />
+        <input name="email" type="email" placeholder="tu@correo.com" required />
+        <input name="password" type="password" placeholder="Contraseña" required />
+        <input name="birthday" type="date" placeholder="Cumpleaños" />
+        <div class="actions">
+          <button class="btn-primary" type="submit">CREAR</button>
+        </div>
+      </form>
+
+      <p class="small">¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
+    </section>
+  </main>
+</body>
+</html>
