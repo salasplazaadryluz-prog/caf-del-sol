@@ -164,6 +164,7 @@ h1{
     top: 0; /* Lo posiciona en la parte superior del contenedor principal. */
     left: 50%; /* Lo centra horizontalmente. */
     transform: translateX(-50%) translateY(-109px); /* Ajusta el centrado y sube 50px extra. Ajusta el valor. */
+  
 }
 /* inicio de la pagina */
 /* === General === */

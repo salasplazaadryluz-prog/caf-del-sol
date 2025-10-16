@@ -4,7 +4,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const mysql = require('mysql2/promise');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,8 +33,11 @@ app.use(session({
 
 // Rutas
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'inicio.html')));
 app.get('/register', (req,res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/inicio/inicio.html');
+});
+
 
 // Login
 app.post('/login', async (req, res) => {
@@ -85,3 +89,4 @@ app.get('/logout', (req, res) => {
 
 // Levantar servidor
 app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+
