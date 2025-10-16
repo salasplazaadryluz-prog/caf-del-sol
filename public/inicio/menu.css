@@ -1,0 +1,141 @@
+/* inicio de la pagina */
+/* === General === */
+#menu-body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #5b3a1a;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Header === */
+#menu-header {
+  text-align: center;
+  background-color: #d2a679;
+  padding: 15px;
+  color: #fff;
+}
+
+#menu-banner h2 {
+  margin: 5px 0;
+  font-size: 1.2rem;
+}
+
+#menu-banner p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* === Buscador === */
+#menu-buscador {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3e2cf;
+  padding: 10px;
+}
+
+#menu-input {
+  width: 60%;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  margin: 0 10px;
+  font-size: 1rem;
+}
+
+#menu-btn-buscar {
+  background-color: #8b5a2b;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* === Main (Menú y Adicionales) === */
+#menu-main {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.menu-opcion {
+  background-color: #fff;
+  border-radius: 15px;
+  width: 40%;
+  text-align: center;
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.menu-opcion:hover {
+  transform: scale(1.05);
+}
+
+.menu-opcion img {
+  width: 100%;
+  border-radius: 15px 15px 0 0;
+}
+
+/* === Promos === */
+#menu-promos {
+  background-color: #fff;
+  color: #000;
+  margin: 20px;
+  border-radius: 15px;
+  text-align: center;
+  padding: 20px;
+}
+
+#menu-promos h2 {
+  color: #b33a00;
+}
+
+.menu-promo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.menu-promo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+}
+
+.menu-icono-taza {
+  font-size: 2rem;
+}
+
+#menu-texto-final {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #b33a00;
+}
+
+/* === Footer === */
+#menu-footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #3b2a16;
+}
+
+#menu-footer p {
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+
+#menu-redes a img {
+  width: 30px;
+  margin: 0 5px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s ease;
+}
+
+#menu-redes a img:hover {
+  transform: scale(1.2);
+}
