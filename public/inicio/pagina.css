@@ -1,141 +1,177 @@
-/* inicio de la pagina */
-/* === General === */
-#cafepromo-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #5b3a1a;
-  color: #fff;
+/* Estilos generales */
+body {
   margin: 0;
-  padding: 0;
-}
-
-/* === Header === */
-#cafepromo-header {
-  text-align: center;
-  background-color: #d2a679;
-  padding: 15px;
+  font-family: "Poppins", sans-serif;
+  background-color: #4a2d1e;
   color: #fff;
+  background-image: url('fondo-cafe.png');
+  background-repeat: repeat;
+  background-size: 150px;
 }
 
-#cafepromo-banner h2 {
-  margin: 5px 0;
-  font-size: 1.2rem;
+/* Header promoción */
+.promo-header {
+  background-color: #c79b6b;
+  padding: 10px 20px;
+  border-radius: 0 0 15px 15px;
 }
 
-#cafepromo-banner p {
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-/* === Buscador === */
-#cafepromo-buscador {
+.promo-content {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background-color: #f3e2cf;
-  padding: 10px;
 }
 
-#cafepromo-input {
-  width: 60%;
-  padding: 8px;
-  border-radius: 10px;
+.promo-text p {
+  font-weight: bold;
+  margin: 0;
+}
+
+.promo-text span {
+  font-size: 0.8rem;
+}
+
+.promo-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Buscador */
+.search-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+
+.search-bar input {
   border: none;
-  margin: 0 10px;
+  outline: none;
+  padding: 5px 10px;
+  border-radius: 20px;
   font-size: 1rem;
 }
 
-#cafepromo-btn-buscar {
-  background-color: #8b5a2b;
-  color: white;
+.search-bar button {
+  background: none;
   border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
-/* === Main (Menú y Adicionales) === */
-#cafepromo-main {
+.search-bar img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Sección Menú */
+.menu-section {
   display: flex;
-  justify-content: space-around;
-  padding: 20px;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px;
 }
 
-.cafepromo-opcion {
+.menu-card {
   background-color: #fff;
   border-radius: 15px;
-  width: 40%;
-  text-align: center;
   color: #000;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease;
+  text-align: center;
+  padding: 10px;
+  width: 150px;
 }
 
-.cafepromo-opcion:hover {
-  transform: scale(1.05);
-}
-
-.cafepromo-opcion img {
+.menu-card img {
   width: 100%;
-  border-radius: 15px 15px 0 0;
+  border-radius: 10px;
 }
 
-/* === Promos === */
-#cafepromo-promos {
-  background-color: #fff;
+.menu-card h3 {
+  margin-top: 8px;
+}
+
+/* Promociones */
+.promos {
+  background-color: #f2f2f2;
   color: #000;
   margin: 20px;
-  border-radius: 15px;
-  text-align: center;
-  padding: 20px;
-}
-
-#cafepromo-promos h2 {
-  color: #b33a00;
-}
-
-.cafepromo-promo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin: 10px 0;
-}
-
-.cafepromo-promo img {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-}
-
-.cafepromo-icono-taza {
-  font-size: 2rem;
-}
-
-#cafepromo-texto-final {
-  margin-top: 15px;
-  font-weight: bold;
-  color: #b33a00;
-}
-
-/* === Footer === */
-#cafepromo-footer {
+  border-radius: 10px;
   text-align: center;
   padding: 15px;
-  background-color: #3b2a16;
 }
 
-#cafepromo-footer p {
-  font-size: 0.8rem;
+.promos h2 {
+  color: #b30000;
   margin-bottom: 10px;
 }
 
-#cafepromo-redes a img {
-  width: 30px;
-  margin: 0 5px;
-  filter: brightness(0) invert(1);
-  transition: transform 0.2s ease;
+.promo-box {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
-#cafepromo-redes a img:hover {
-  transform: scale(1.2);
+.promo-item {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  width: 160px;
+}
+
+.promo-item img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.promo-info h4 {
+  color: #b30000;
+  margin: 5px 0;
+}
+
+.promo-deal {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #b30000;
+}
+
+.promo-link {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+}
+
+.social-icons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-icons img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
 }

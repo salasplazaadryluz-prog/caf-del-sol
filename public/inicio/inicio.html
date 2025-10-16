@@ -3,64 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Café del Sur</title>
+  <title>Café del Soul</title>
   <link rel="stylesheet" href="pagina.css">
 </head>
-<body id="cafepromo-body">
+<body>
 
-  <header id="cafepromo-header"> 
-    <div id="cafepromo-banner">
-      <h2>Algunos de tus envíos pueden ser gratis!</h2>
-      <p>Válido Hasta 1 Febrero - 30 Febrero 2025</p>
+  <!-- Encabezado con promoción -->
+  <header class="promo-header">
+    <div class="promo-content">
+      <div class="promo-text">
+        <p>Algunos de tus envíos pueden ser gratis!</p>
+        <span>Válido Hasta 1 Febrero – 30 Febrero 2025</span>
+      </div>
+      <div class="promo-user">
+        <img src="user.jpg" alt="Usuario">
+      </div>
     </div>
   </header>
 
-  <section id="cafepromo-buscador">
-    <div id="cafepromo-logo"></div>
-    <input type="text" placeholder="Buscar..." id="cafepromo-input">
-    <button id="cafepromo-btn-buscar">🔍</button>
+  <!-- Buscador -->
+  <section class="search-section">
+    <div class="logo">
+      <img src="logo.png" alt="Logo Café del Soul">
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar...">
+      <button><img src="search-icon.png" alt="Buscar"></button>
+    </div>
   </section>
 
-  <main id="cafepromo-main">
-    <div class="cafepromo-opcion">
-      <img src="menu.jpg" alt="Tazas de café variadas">
+  <!-- Menú principal -->
+  <main class="menu-section">
+    <div class="menu-card">
+      <img src="menu.jpg" alt="Cafés">
       <h3>MENÚ</h3>
     </div>
-
-    <div class="cafepromo-opcion">
-      <img src="adicionales.jpg" alt="Postres y muffins">
+    <div class="menu-card">
+      <img src="adicionales.jpg" alt="Adicionales">
       <h3>ADICIONALES</h3>
     </div>
   </main>
 
-  <section id="cafepromo-promos">
+  <!-- Promociones -->
+  <section class="promos">
     <h2>¡Tenemos Promos!</h2>
-    <div class="cafepromo-promo">
-      <img src="cafe-negro.jpg" alt="Café negro">
-      <div>
-        <h4>Días Cafeteros</h4>
-        <p><strong>Café Negro</strong> 2x1</p>
+
+    <div class="promo-box">
+      <div class="promo-item">
+        <img src="cafe-negro.jpg" alt="Café negro">
+        <div class="promo-info">
+          <h4>Bebidas Cafeteras</h4>
+          <p>Café Negro</p>
+          <span class="promo-deal">2x1</span>
+        </div>
+      </div>
+
+      <div class="promo-item">
+        <img src="taza.jpg" alt="Taza">
+        <div class="promo-info">
+          <h4>Trae tu taza</h4>
+          <span class="promo-deal">10% descuento</span>
+        </div>
       </div>
     </div>
 
-    <div class="cafepromo-promo">
-      <div class="cafepromo-icono-taza">☕</div>
-      <div>
-        <h4>Trae tu taza</h4>
-        <p>10% descuento</p>
-      </div>
-    </div>
-
-    <p id="cafepromo-texto-final">REVISA NUESTRAS PROMOS</p>
+    <p class="promo-link">REVISA NUESTRAS PROMOS</p>
   </section>
 
-  <footer id="cafepromo-footer">
-    <p>SÍGUENOS Y CONTACTA CON NOSOTROS A TRAVÉS DE NUESTRAS REDES SOCIALES</p>
-    <div id="cafepromo-redes">
+  <!-- Redes sociales -->
+  <footer class="footer">
+    <p>SÍGUENOS Y CONTÁCTATE CON NOSOTROS A TRAVÉS DE NUESTRAS REDES SOCIALES:</p>
+    <div class="social-icons">
       <a href="#"><img src="facebook.png" alt="Facebook"></a>
+      <a href="#"><img src="whatsapp.png" alt="WhatsApp"></a>
       <a href="#"><img src="instagram.png" alt="Instagram"></a>
       <a href="#"><img src="tiktok.png" alt="TikTok"></a>
-      <a href="#"><img src="whatsapp.png" alt="WhatsApp"></a>
+      <a href="#"><img src="x.png" alt="X"></a>
     </div>
   </footer>
 
