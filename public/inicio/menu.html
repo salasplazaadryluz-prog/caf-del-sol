@@ -1,68 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Café del Sur</title>
-  <link rel="stylesheet" href="menu.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú</title>
+  <link rel="stylesheet" href="menu.css" />
 </head>
-<body id="menu-body">
-
-  <header id="menu-header"> 
-    <div id="menu-banner">
-      <h2>Algunos de tus envíos pueden ser gratis!</h2>
-      <p>Válido Hasta 1 Febrero - 30 Febrero 2025</p>
+<body>
+    
+  <header class="menu-container">
+    <div class="menu-left">
+      <div class="menu-icon">
+        <!-- Puedes usar un ícono SVG o una imagen aquí -->
+        <img src="https://img.icons8.com/ios-filled/50/000000/menu.png" alt="Menú" />
+      </div>
+      <h1>MENÚ</h1>
     </div>
-  </header>
 
-  <section id="menu-buscador">
-    <div id="menu-logo"></div>
-    <input type="text" placeholder="Buscar..." id="menu-input">
-    <button id="menu-btn-buscar">🔍</button>
-  </section>
+    <div class="menu-right">
+      <div class="user-info">
+        <strong>Perpetuo Domingo</strong><br />
+        <span class="role">Salas</span><br />
+        <span class="balance">Saldo: $80.000</span><br>
+      </div>
+      <div class="user-photo">
+        <img src="imagen/pablo.jpg" alt="Usuario" />
+      </div>
+    </div>
+  </header><br>
+  <div class="menu-pedidos">
+  <span class="titulo"><a href="inicio.html">Inicio</a></span>
+  <span class="ver-mas"><a href="adicionales.html">Ver mas></a></span>
+</div>
 
-  <main id="menu-main">
-    <div class="menu-opcion">
-      <img src="menu.jpg" alt="Tazas de café variadas">
+  <!-- Menú principal -->
+  <main class="menu-section">
+    <div class="menu-card">
+      <img src="menu.jpg" alt="Cafés">
       <h3>MENÚ</h3>
     </div>
-
-    <div class="menu-opcion">
-      <img src="adicionales.jpg" alt="Postres y muffins">
+    <div class="menu-card">
+      <img src="adicionales.jpg" alt="Adicionales">
       <h3>ADICIONALES</h3>
     </div>
   </main>
-
-  <section id="menu-promos">
-    <h2>¡Tenemos Promos!</h2>
-    <div class="menu-promo">
-      <img src="cafe-negro.jpg" alt="Café negro">
-      <div>
-        <h4>Días Cafeteros</h4>
-        <p><strong>Café Negro</strong> 2x1</p>
-      </div>
-    </div>
-
-    <div class="menu-promo">
-      <div class="menu-icono-taza">☕</div>
-      <div>
-        <h4>Trae tu taza</h4>
-        <p>10% descuento</p>
-      </div>
-    </div>
-
-    <p id="menu-texto-final">REVISA NUESTRAS PROMOS</p>
-  </section>
-
-  <footer id="menu-footer">
-    <p>SÍGUENOS Y CONTACTA CON NOSOTROS A TRAVÉS DE NUESTRAS REDES SOCIALES</p>
-    <div id="menu-redes">
-      <a href="#"><img src="facebook.png" alt="Facebook"></a>
-      <a href="#"><img src="instagram.png" alt="Instagram"></a>
-      <a href="#"><img src="tiktok.png" alt="TikTok"></a>
-      <a href="#"><img src="whatsapp.png" alt="WhatsApp"></a>
-    </div>
-  </footer>
 
 </body>
 </html>
