@@ -32,9 +32,9 @@ app.use(session({
 }));
 
 // Rutas
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/register', (req,res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
-app.get('/inicio', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/inicio/inicio.html');
 });
 
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
 
     req.session.userId = user.id;
     req.session.userName = user.name;
-    return res.redirect('/inicio');
+    return res.redirect('/dashboard');
   } catch (err) {
     console.error(err);
     return res.status(500).send('Error interno');
