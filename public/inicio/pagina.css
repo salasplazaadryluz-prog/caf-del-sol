@@ -121,8 +121,8 @@ body {
 }
 
 .search-bar button img {
-    height: 30px; /* Ajusta el tamaño del icono de búsqueda */
-    width: auto;
+    height: 70px; /* Ajusta el tamaño del icono de búsqueda */
+    width: 70px;
     vertical-align: middle;
 }
 
