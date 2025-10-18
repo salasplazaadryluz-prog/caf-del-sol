@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
 
     req.session.userId = user.id;
     req.session.userName = user.name;
-    return res.redirect('/inicio');
+    return res.redirect('/dashboard');
   } catch (err) {
     console.error(err);
     return res.status(500).send('Error interno');
