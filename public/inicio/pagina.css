@@ -4,75 +4,127 @@ body {
   font-family: "Poppins", sans-serif;
   background-color: #4a2d1e;
   color: #fff;
-  background-image: url('fondo-cafe.png');
-  background-repeat: repeat;
+  background-image: url('imagen/Fondo.png');
+  /* background-repeat: repeat; */
   background-size: 150px;
 }
 
 /* Header promoción */
 .promo-header {
   background-color: #c79b6b;
-  padding: 10px 20px;
+  padding: 20px 20px;
   border-radius: 0 0 15px 15px;
+  margin: 10px 10px 0px 10px;
+  
+ 
 }
+
 
 .promo-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 80px;
+  
+  
 }
 
 .promo-text p {
   font-weight: bold;
   margin: 0;
+  
+  
+ 
 }
 
 .promo-text span {
   font-size: 0.8rem;
+  border-radius: 15px;
+    padding: 15px 20px;
+  
 }
+.promo-link img{
+  width: 60px;
+  height: auto;
+  background-image: url('imagen/inicio.png');
+   display: block;      /* asegura que acepte márgenes */
+  margin-left: -60px;
+   position: relative;
+  top: -10px;  
+}
+
 
 .promo-user img {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
+  position: relative;
+  left: -20px;
 }
 
+.user-info {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-left: 970px;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+}
+.tamaño-letra{
+  font-size: 18px;
+}
+
+
 /* Buscador */
-.search-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
+/* Contenedor principal: Activar Flexbox */
+.search-bar {
+    display: flex;
+    align-items: center; /* Centra los elementos verticalmente */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    max-width: 1200px; /* Ancho máximo de la barra (ejemplo) */
+    background-color: white; /* Simula la barra blanca */
+    border-radius: 50px; /* Bordes redondeados */
+    padding: 10px; /* Relleno interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 1. El Logo (Izquierda) */
+.logo {
+    /* El Flexbox se encarga de ponerlo a la izquierda */
+    flex-shrink: 0; /* Evita que el logo se encoja */
+    margin-right: 10px; /* Espacio entre el logo y el campo de texto */
 }
 
 .logo img {
-  height: 50px;
+    height: 40px; /* Ajusta el tamaño del logo */
+    width: auto;
 }
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 20px;
-  padding: 5px 10px;
+/* 2. Campo de Texto (Centro, ocupa el espacio restante) */
+.iconsearch {
+    flex-grow: 1; /* ⬅️ Hace que el campo de texto ocupe todo el espacio disponible */
+    border: none;
+    outline: none; /* Quita el borde azul al hacer clic */
+    padding: 0 10px; /* Relleno horizontal dentro del campo */
+    font-size: 16px;
+    height: 40px; /* Misma altura que el logo y botón para alineación */
 }
 
-.search-bar input {
-  border: none;
-  outline: none;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 1rem;
-}
-
+/* 3. Botón/Icono de Búsqueda (Derecha) */
 .search-bar button {
-  background: none;
-  border: none;
+    /* El Flexbox lo pone a la derecha */
+    flex-shrink: 0; /* Evita que el botón se encoja */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px; /* Espacio entre el campo de texto y el botón */
 }
 
-.search-bar img {
-  width: 20px;
-  height: 20px;
+.search-bar button img {
+    height: 30px; /* Ajusta el tamaño del icono de búsqueda */
+    width: auto;
+    vertical-align: middle;
 }
 
 /* Sección Menú */
