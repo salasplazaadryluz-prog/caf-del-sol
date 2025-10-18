@@ -105,8 +105,8 @@ a{
   border-radius: 15px;
   color: #000;
   text-align: center;
-  padding: 10px;
-  width: 380px;
+  padding: 20px;
+  width: 360px;
 }
 
 .menu-card img {
@@ -117,21 +117,30 @@ a{
 .menu-card h3 {
   margin-top: 10px;
 }
-
+.descuento h2{
+  font-size: 38px;
+  text-align: right;
+}
+.descuento p{
+  font-size: 20px;
+  text-align: center;
+}
 .descuento {
   background-color: white;
-  width: 220px;
+  width: 820px;
+  padding: 20px;
 
 }
 .descuento-section {
   display: flex;
   justify-content: center;
-  gap: 20px;
   margin: 20px;
-  width: 210px;
+  padding: 20px;
+  text-align: right;
+  
 }
 .descuento img{
   width: 100px;
   border-radius: 10px;
-  text-align: center;
+  align-content: space-between;
 }
