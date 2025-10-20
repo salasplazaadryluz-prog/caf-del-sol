@@ -82,8 +82,8 @@ body {
     width: 100%; /* Asegura que ocupe todo el ancho */
     max-width: 1200px; /* Ancho máximo de la barra (ejemplo) */
     background-color: white; /* Simula la barra blanca */
-    border-radius: 50px; /* Bordes redondeados */
-    padding: 10px; /* Relleno interno */
+    border-radius: 40px; /* Bordes redondeados */
+    padding: 0px; /* Relleno interno */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -97,6 +97,7 @@ body {
 .logo img {
     height: 40px; /* Ajusta el tamaño del logo */
     width: auto;
+    margin-left: 20px;
 }
 
 /* 2. Campo de Texto (Centro, ocupa el espacio restante) */
@@ -121,8 +122,8 @@ body {
 }
 
 .search-bar button img {
-    height: 70px; /* Ajusta el tamaño del icono de búsqueda */
-    width: 70px;
+    height: 60px; /* Ajusta el tamaño del icono de búsqueda */
+    width: 60px;
     vertical-align: middle;
 }
 
@@ -130,8 +131,8 @@ body {
 .menu-section {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin: 20px;
+  gap: 80px;
+  margin: 50px;
 }
 
 .menu-card {
@@ -154,56 +155,145 @@ body {
 
 .menu-card h3 {
   margin-top: 8px;
+  margin-top: 20px; /* 🔹 mueve el texto hacia abajo */
+  font-weight: bold;
 }
 
 /* Promociones */
-.promos {
-  background-color: #f2f2f2;
-  color: #000;
-  margin: 20px;
-  border-radius: 10px;
-  text-align: center;
-  padding: 15px;
+/* --- VARIABLES DE COLOR (Opcional, pero útil para consistencia) --- */
+/* Puedes redefinir estas si es necesario, pero solo afectarán a este bloque */
+#contenedor-promociones-cafe {
+    --rojo-oscuro: #8B0000; 
+    --gris-fondo: #f7f7f7;
+    --gris-texto: #444444;
+    
+    /* Configuración del contenedor principal */
+    width: 100%; /* O el ancho máximo que desees (ej: max-width: 600px) */
+    max-width: 600px; /* Ejemplo de ancho */
+    margin: 20px auto; /* Centra el bloque en la página */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--gris-fondo);
+    font-family: Arial, sans-serif; /* Puedes cambiar la fuente aquí */
 }
 
-.promos h2 {
-  color: #b30000;
-  margin-bottom: 10px;
+/* --- TÍTULO PRINCIPAL --- */
+#contenedor-promociones-cafe .promo-header {
+    background-color: var(--rojo-oscuro);
+    color: #FFFFFF;
+    text-align: center;
+    padding: 15px 0;
 }
 
-.promo-box {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
+#contenedor-promociones-cafe .promo-header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    /* Estilo de letra ligeramente cursiva como en la imagen */
+    font-style: italic; 
 }
 
-.promo-item {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 10px;
-  width: 160px;
+/* --- CONTENIDO DE LAS PROMOS --- */
+#contenedor-promociones-cafe .promo-content-wrapper {
+    padding: 20px;
+    background-color: #ffffff; /* Fondo un poco más oscuro, simula el color de la imagen */
+    /* Simulación del patrón de fondo (mejor usar una imagen real de fondo si es posible) */
+    background-image: radial-gradient(#e0e0e0 10%, transparent 10%), radial-gradient(#e0e0e0 10%, transparent 10%);
+    background-size: 50px 50px;
+    background-position: 0 0, 25px 25px;
 }
 
-.promo-item img {
-  width: 100%;
-  border-radius: 10px;
+#contenedor-promociones-cafe .promo-card {
+    display: flex; 
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.promo-info h4 {
-  color: #b30000;
-  margin: 5px 0;
+#contenedor-promociones-cafe .card-image {
+    flex: 0 0 35%; 
+    text-align: center;
 }
 
-.promo-deal {
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #b30000;
+#contenedor-promociones-cafe .card-image img {
+    /* **IMPORTANTE**: Ajusta estos tamaños a tus imágenes reales */
+    width: 100px; 
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    
 }
 
-.promo-link {
-  margin-top: 15px;
-  font-weight: bold;
+#contenedor-promociones-cafe .card-details {
+    flex: 1; 
+    padding-left: 15px;
+     border: 4px solid #8b1313;
+  border-radius: 10px; /* redondea las esquinas */
+    
+}
+
+/* --- ETIQUETAS ROJAS (Días Cafeteros / Traé tu taza) --- */
+#contenedor-promociones-cafe .etiqueta-roja {
+    background-color: var(--rojo-oscuro);
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 10px;
+    min-width: 150px;
+    border: 4px solid #8b1313;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* --- TEXTOS DENTRO DE LA PROMO --- */
+#contenedor-promociones-cafe .promo-title {
+    font-size: 1em;
+    margin: 0;
+    color: #000; 
+    font-weight: bold;
+}
+
+#contenedor-promociones-cafe .promo-descuento {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--rojo-oscuro);
+    margin: -5px 0 5px 0;
+    line-height: 1;
+}
+
+#contenedor-promociones-cafe .texto-pequeño {
+    font-size: 0.6em;
+    font-weight: normal;
+    position: relative;
+    bottom: 5px;
+}
+
+#contenedor-promociones-cafe .promo-restriccion {
+    font-size: 0.7em;
+    color: var(--gris-texto);
+    margin: 0;
+}
+
+/* --- LÍNEA DIVISORA --- */
+#contenedor-promociones-cafe .promo-divider {
+    border-top: 2px dashed var(--rojo-oscuro);
+    margin: 10px 0 30px 0;
+}
+
+/* --- PIE DE PÁGINA (REVISA NUESTRAS PROMOS) --- */
+#contenedor-promociones-cafe .promo-footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: var(--gris-fondo); /* Fondo del pie */
+}
+
+#contenedor-promociones-cafe .promo-footer h2 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #000;
 }
 
 /* Footer */
