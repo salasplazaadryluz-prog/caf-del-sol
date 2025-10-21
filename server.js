@@ -638,4 +638,3 @@ app.get('/api/productos', async (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
-
