@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adicionales - Tienda de Café</title>
+<link rel="stylesheet" href="/css/menu.css">
+<link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+
+<body>
+  <!-- ======= ENCABEZADO ======= -->
+  <header>
+     <main class="main-wrapper">
+    <div class="nav-container">
+      <div class="logo">
+        <img id="imgmenu" src="/img/cafe del sol.png" alt="Logo Café del Sol" loading="lazy">
+        <h1>Café del Sol</h1>
+      </div>
+
+      <nav>
+        <a href="/menu.html">Menú</a>
+        <a href="/adicionales.html" class="active">Adicionales</a>
+        <a href="/promos.html">Promociones</a>
+        <a href="/carrito.html">Carrito</a>
+        <a href="/admin.html">Pedidos</a>
+        <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======= CONTENIDO PRINCIPAL ======= -->
+    <h2>Adicionales</h2>
+
+    <!-- Solo visible para admin -->
+    <div id="form-admin" style="display:none; margin-bottom:20px;">
+      <h3>Agregar Adicional</h3>
+      <form id="adicionalForm">
+        <input type="text" id="nombre" placeholder="Nombre del adicional" required>
+        <input type="number" id="precio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="stock" placeholder="Stock inicial" required>
+        <input type="text" id="imagen" placeholder="URL de la imagen">
+        <textarea id="descripcion" placeholder="Descripción del adicional"></textarea>
+        <button type="submit" class="btn btn-add">Guardar Adicional</button>
+      </form>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div id="editForm" style="display:none;">
+      <h3>Editar Adicional</h3>
+      <form id="editAdicionalForm">
+        <input type="hidden" id="editId">
+        <input type="text" id="editNombre" placeholder="Nombre" required>
+        <input type="number" id="editPrecio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="editStock" placeholder="Stock" required>
+        <input type="text" id="editImagen" placeholder="URL de la imagen">
+        <textarea id="editDescripcion" placeholder="Descripción"></textarea>
+        <button type="submit" class="btn btn-edit">Guardar Cambios</button>
+        <button type="button" id="cancelEdit" class="btn btn-delete">Cancelar</button>
+      </form>
+    </div>
+
+    <div id="lista"></div>
+  </main>
+
+  <!-- ======= PIE PROMOCIONAL ======= -->
+  <div class="promo-footer">
+    <h3>Disfruta los mejores complementos con tu café</h3>
+    <p>Haz tu pedido ahora y personalízalo con nuestros adicionales exclusivos ☕</p>
+    <div class="promo-icons">
+      <img src="/img/icon-coffee.png" alt="Café">
+      <img src="/img/icon-cream.png" alt="Crema">
+      <img src="/img/icon-syrup.png" alt="Sirope">
+    </div>
+  </div>
+
+  <footer>
+    <span>&copy; 2025 Café del Sol</span> — Todos los derechos reservados.
+  </footer>
+</main>
+  <script>
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) {
+    alert('Debes iniciar sesión para acceder a esta sección.');
+    location.href = '/login.html';
+  }
+
+  if (user.role === 'admin') {
+    document.getElementById('form-admin').style.display = 'block';
+  }
+
+  // Mostrar nombre del usuario en el encabezado
+  const nav = document.querySelector('nav');
+  if (user?.nombre) {
+    const name = document.createElement('span');
+    name.textContent = `👤 ${user.nombre}`;
+    name.classList.add('user-name');
+    nav.insertBefore(name, document.getElementById('logoutBtn'));
+  }
+
+  // Cerrar sesión
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    location.href = '/login.html';
+  });
+
+  async function loadAdicionales() {
+    const r = await fetch('/api/adicionales');
+    const j = await r.json();
+    const c = document.getElementById('lista');
+
+    if (!j.adicionales || j.adicionales.length === 0) {
+      c.innerHTML = '<p>No hay adicionales disponibles</p>';
+      return;
+    }
+
+    c.innerHTML = j.adicionales.map(p => `
+      <div class="card">
+        ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
+        <h3>${p.nombre}</h3>
+        <p>${p.descripcion || ''}</p>
+        <p><strong>Precio:</strong> $${p.precio}</p>
+        <p><strong>Stock:</strong> ${p.stock}</p>
+        ${user.role === 'admin'
+          ? `<button class="btn btn-edit" data-id="${p.id}">Editar</button>
+             <button class="btn btn-delete" data-id="${p.id}">Eliminar</button>`
+          : `<button class="btn btn-add" data-id="${p.id}">Agregar al carrito</button>`}
+      </div>
+    `).join('');
+
+    if (user.role !== 'admin') {
+      c.querySelectorAll('.btn-add').forEach(b => b.addEventListener('click', async (e) => {
+        const id = Number(e.target.dataset.id);
+        const res = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ user_id: user.id, adicionalId: id, cantidad: 1 })
+        });
+        const j = await res.json();
+        alert(j.ok ? 'Adicional añadido al carrito' : (j.message || 'Error al agregar'));
+      }));
+    }
+
+    if (user.role === 'admin') {
+      c.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          const id = e.target.dataset.id;
+          if (confirm('¿Seguro que deseas eliminar este adicional?')) {
+            const r = await fetch(`/api/adicionales/${id}`, { method: 'DELETE' });
+            const j = await r.json();
+            if (j.ok) {
+              alert('Adicional eliminado');
+              loadAdicionales();
+            } else alert(j.message || 'Error al eliminar adicional');
+          }
+        });
+      });
+
+      c.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = e.target.dataset.id;
+          const adicional = j.adicionales.find(p => p.id == id);
+          if (adicional) {
+            document.getElementById('editForm').style.display = 'block';
+            document.getElementById('editId').value = adicional.id;
+            document.getElementById('editNombre').value = adicional.nombre;
+            document.getElementById('editPrecio').value = adicional.precio;
+            document.getElementById('editStock').value = adicional.stock;
+            document.getElementById('editImagen').value = adicional.imagen;
+            document.getElementById('editDescripcion').value = adicional.descripcion || '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+  }
+
+  document.getElementById('adicionalForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      nombre: nombre.value.trim(),
+      descripcion: descripcion.value.trim(),
+      precio: parseFloat(precio.value),
+      stock: parseInt(stock.value),
+      imagen: imagen.value.trim()
+    };
+
+    const res = await fetch('/api/adicionales', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    const j = await res.json();
+    if (j.ok) {
+      alert('Adicional agregado correctamente');
+      e.target.reset();
+      loadAdicionales();
+    } else alert(j.message || 'Error al guardar adicional');
+  });
+
+  document.getElementById('editAdicionalForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = editId.value;
+    const data = {
+      nombre: editNombre.value.trim(),
+      descripcion: editDescripcion.value.trim(),
+      precio: parseFloat(editPrecio.value),
+      stock: parseInt(editStock.value),
+      imagen: editImagen.value.trim()
+    };
+
+    const res = await fetch(`/api/adicionales/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    const j = await res.json();
+    if (j.ok) {
+      alert('Adicional actualizado correctamente');
+      document.getElementById('editAdicionalForm').reset();
+      document.getElementById('editForm').style.display = 'none';
+      loadAdicionales();
+    } else alert(j.message || 'Error al actualizar adicional');
+  });
+
+  document.getElementById('cancelEdit')?.addEventListener('click', () => {
+    document.getElementById('editAdicionalForm').reset();
+    document.getElementById('editForm').style.display = 'none';
+  });
+
+  loadAdicionales();
+  </script>
+</body>
+</html>

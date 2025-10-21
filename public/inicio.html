@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio - Café del Sol</title>
+  <link rel="icon" type="image/png" href="img/cafe del sol.png">
+<link rel="stylesheet" href="css/index.css" />
+
+  <style>
+   
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-grid">
+      <div></div><div></div><div></div><div></div>
+    </div>
+     <p>Algunos de tus envíos pueden ser gratis — <strong>Válido hasta 30 Febrero 2025</strong></p>
+    <div class="user-info">
+      <div>
+        <div id="userName">Usuario</div>
+      </div>
+      <img src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" alt="foto usuario" id="userPhoto">
+    </div>
+  </header>
+
+  
+   
+ 
+
+  <div class="search-box">
+    <img src="img/cafe del sol.png" alt="logo" width="24" style="margin-right:8px;">
+    <input type="text" placeholder="Buscar...">
+     <button><img class="iconimg" src="img/LUPA.png" alt="Buscar"></button>
+  </div>
+
+  <div class="buttons">
+  <!-- MENÚ -->
+  <a href="/menu.html" class="btn-nav">
+    <img src="img/images.png" alt="Cafés" id="menu-img">
+    MENÚ
+  </a>
+
+  <!-- ADICIONALES -->
+  <a href="/adicionales.html" class="btn-nav">
+    <img src="img/images.png" alt="Adicionales" id="adicionales-img">
+    ADICIONALES
+  </a>
+</div>
+
+<section class="promos">
+  <h2>¡Tenemos Promos!</h2>
+  <div class="promo-cards">
+    <div class="promo-card">
+      <a href="/promos.html">
+        <img src="img/images.png" alt="Promo 1" id="promo1-img" class="promo-img">
+        <h4>Bebidas Cafeteras</h4>
+        <p><strong>2x1</strong></p>
+      </a>
+    </div>
+
+    <div class="promo-card">
+      <a href="/promos.html">
+        <img src="img/images.png" alt="Promo 2" id="promo2-img" class="promo-img">
+        <h4>Trae tu taza</h4>
+        <p><strong>10% descuento</strong></p>
+      </a>
+    </div>
+  </div>
+  <p><a href="/promos.html" style="color:#fff;text-decoration:underline;">Revisa nuestras promos</a></p>
+</section>
+
+
+
+  <footer>
+    <p>SÍGUENOS Y CONTÁCTATE CON NOSOTROS A TRAVÉS DE NUESTRAS REDES SOCIALES:</p>
+    <div class="socials">
+      <a href="https://facebook.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+      <a href="https://wa.me/573001234567" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"></a>
+      <a href="https://instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram"></a>
+      <a href="https://tiktok.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok"></a>
+    </div>
+  </footer>
+
+ <script>
+  // Mostrar datos del usuario logueado
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (user && user.nombre) {
+    document.getElementById('userName').textContent = user.nombre;
+  } else {
+    document.getElementById('userName').textContent = 'Invitado';
+  }
+
+  if (user.foto) {
+    document.getElementById('userPhoto').src = user.foto;
+  }
+
+  // --- CARGAR IMÁGENES DE PRODUCTOS ALEATORIAS ---
+ async function cargarProductos() {
+  try {
+    const res = await fetch('/api/productos');
+    const data = await res.json();
+
+    const productos = Array.isArray(data) ? data : data.productos;
+    if (!productos || !productos.length) {
+      console.warn('No se encontraron productos.');
+      return;
+    }
+
+    // --- FILTRAR SEGÚN CATEGORÍA ---
+    const menu = productos.filter(p =>
+      p.categoria?.toLowerCase().includes('menu') || 
+      p.categoria?.toLowerCase().includes('café')
+    );
+
+    const adicionales = productos.filter(p =>
+      p.categoria?.toLowerCase().includes('adicional')
+    );
+
+    const promos = productos.filter(p =>
+      p.categoria?.toLowerCase().includes('promo')
+    );
+
+    // --- FUNCIÓN PARA TOMAR IMAGEN ALEATORIA ---
+    const randomImg = (arr) =>
+      arr.length ? arr[Math.floor(Math.random() * arr.length)].imagen : '';
+
+    // --- ASIGNAR IMÁGENES ---
+    const menuImg = document.getElementById('menu-img');
+    const adicionalesImg = document.getElementById('adicionales-img');
+    const promo1Img = document.getElementById('promo1-img');
+    const promo2Img = document.getElementById('promo2-img');
+
+    if (menuImg && menu.length) menuImg.src = randomImg(menu);
+    if (adicionalesImg && adicionales.length) adicionalesImg.src = randomImg(adicionales);
+    if (promo1Img && promos.length) promo1Img.src = randomImg(promos);
+    if (promo2Img && promos.length) promo2Img.src = randomImg(promos);
+
+  } catch (err) {
+    console.error('Error cargando productos:', err);
+  }
+}
+
+cargarProductos();
+
+
+</script>
+
+<script>
+  // Cerrar sesión
+  document.getElementById('userPhoto').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    location.href = '/login.html';
+  });
+
+</script>
+
+
+
+</body>
+</html>

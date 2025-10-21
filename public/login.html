@@ -1,48 +1,74 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Iniciar sesión - Café</title>
-  <link href="css/styles.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Iniciar sesión | Café del Sol ☕</title>
+
+  <link rel="stylesheet" href="/css/login.css">
+
+  <link rel="icon" type="image/png" href="/img/cafe-del-sol.png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+ 
 </head>
+
 <body>
-  <main class="phone">
-    <section class="top">
-      <div class="contenedor-principal">
-      <div class="logo-container">
-        <img src="images/cafe del sol.png" alt="logo" />
+  
+    <button id="logoutBtn"><a class="logout-btn" href="/index.html">Ir a info</a></button>
+
+    
+
+  <div class="login-container">
+    <div class="logo">
+      <img src="/img/cafe del sol.png" alt="Logo Café del Sol">
+    </div>
+
+    <h2>¡Bienvenido!</h2>
+
+    <form id="formLogin">
+      <div class="input-group">
+        <span class="icon">✉️</span>
+        <input name="email" type="email" placeholder="Correo electrónico" required>
       </div>
+
+      <div class="input-group">
+        <span class="icon">🔑</span>
+        <input name="password" type="password" placeholder="Contraseña" required>
       </div>
-      <div class="beans">
-        <img src="images/caffe.png" alt="coffee" />
-      </div>
-      
-    </section>
 
-    <section class="card">
-      <h1>¡Bienvenido!</h1>
+      <button type="submit">Iniciar sesión</button>
+    </form>
 
-      <form action="/login" method="POST" class="form">
-        <label class="input-pill">
-          <span class="icon">✉️</span>
-          <input name="email" type="email" placeholder="hola@sitioincreible.com" required />
-        </label>
+    <div class="extra-links">
+      <p>¿Olvidaste tu contraseña?</p>
+      <p>¿No tienes cuenta? <a href="/register.html">Únete aquí</a></p>
+    </div>
+  </div>
 
-        <label class="input-pill">
-          <span class="icon">🔑</span>
-          <input id="password" name="password" type="password" placeholder="Contraseña" required />
-        </label>
+  <script>
+    document.getElementById('formLogin').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const fd = new FormData(e.target);
+        const data = Object.fromEntries(fd.entries());
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const j = await res.json();
+        if (j.ok) {
+          localStorage.setItem('user', JSON.stringify(j.user));
+          location.href = '/inicio.html';
+        } else {
+          alert(j.message || 'Error al iniciar sesión');
+        }
+      } catch (err) {
+        console.error('Error de red o servidor:', err);
+        alert('No se pudo conectar al servidor.');
+      }
+    });
+  </script>
 
-        <div class="actions">
-          <a class="link-small" href="#">¿Olvidaste tu contraseña?</a>
-          <button class="btn-primary" type="submit"><a href="/public/inicio/inicio.html">iniciar sesion</a></button>
-        </div>
-      </form>
-
-      <p class="small">¿Aún no tienes una cuenta? <a href="/register">Únete aquí</a></p>
-    </section>
-  </main>
 </body>
 </html>

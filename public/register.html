@@ -1,29 +1,57 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Crear cuenta - Café</title>
-  <link href="css/styles.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+  <link rel="stylesheet" href="/css/register.css">
 </head>
 <body>
-  <main class="phone">
-    <section class="card create">
-      <h1>CREAR CUENTA</h1>
+    <div><button id="logoutBtn"><a class="logout-btn" href="/index.html">Ir a info</a></button>
+</div>
+    
+<form id="formRegister">
+  <label>Nombre: <input name="nombre" required></label>
+  <label>Email: <input name="email" type="email" required></label>
+  <label>Contraseña: <input name="password" type="password" required></label>
 
-      <form action="/register" method="POST" class="form">
-        <input name="name" placeholder="Nombre completo" required />
-        <input name="email" type="email" placeholder="tu@correo.com" required />
-        <input name="password" type="password" placeholder="Contraseña" required />
-        <input name="birthday" type="date" placeholder="Cumpleaños" />
-        <div class="actions">
-          <button class="btn-primary" type="submit">CREAR</button>
-        </div>
-      </form>
+  <label>Tipo de usuario:
+    <select name="role" id="role">
+      <option value="cliente">Cliente</option>
+      <option value="admin">Administrador</option>
+    </select>
+  </label>
 
-      <p class="small">¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
-    </section>
-  </main>
+  <div id="adminCodeContainer" style="display:none;">
+    <label>Código de administrador:
+      <input name="admin_code" type="text" placeholder="Código secreto">
+    </label>
+  </div>
+
+  <button class="buttoncreate">Crear cuenta</button>
+</form>
+
+<script>
+const roleSelect = document.getElementById('role');
+const adminCodeContainer = document.getElementById('adminCodeContainer');
+
+roleSelect.addEventListener('change', () => {
+  adminCodeContainer.style.display = roleSelect.value === 'admin' ? 'block' : 'none';
+});
+
+document.getElementById('formRegister').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd.entries());
+  const res = await fetch('/api/register', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const j = await res.json();
+  if (j.ok) location.href = '/'; else alert(j.message);
+});
+</script>
 </body>
 </html>

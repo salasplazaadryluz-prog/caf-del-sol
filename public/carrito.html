@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito - Tienda de Café</title>
+  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+<body>
+<header>
+       <div class="nav-container">
+      <div class="logo">
+        <img id="imgmenu" src="/img/cafe del sol.png" alt="Logo Café del Sol" loading="lazy">
+        <h1>Café del Sol</h1>
+      </div>
+
+      <nav>
+          <a href="/menu.html" class="active">Menú</a>
+          <a href="/adicionales.html">Adicionales</a>
+          <a href="/promos.html">Promociones</a>
+          <a href="/carrito.html">Carrito</a>
+          <a href="/admin.html">Pedidos</a>
+          <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+</header>
+  <main>
+    <h2>Carrito</h2>
+    <div id="items"></div>
+    <h3 id="total"></h3>
+    <button id="checkout">Pagar</button>
+  </main>
+
+  <script>
+    // Protección de acceso
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      alert('Debes iniciar sesión para acceder a esta sección.');
+      location.href = '/login.html';
+    }
+
+    // --- Cargar carrito ---
+    async function refresh() {
+      const r = await fetch('/api/cart');
+      const j = await r.json();
+      const c = document.getElementById('items');
+      const totalEl = document.getElementById('total');
+
+      if (!j.items.length) {
+        c.innerHTML = '<p>Carrito vacío</p>';
+        totalEl.textContent = '';
+        return;
+      }
+
+    let total = 0;
+c.innerHTML = j.items.map(it => {
+  const precio = Number(it.precio);
+  const cantidad = Number(it.cantidad);
+  const subtotal = precio * cantidad;
+  total += subtotal;
+  return `
+    <div class="card" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+      <div>
+        <strong>${it.nombre}</strong><br>
+        <small>$${precio.toFixed(2)} c/u</small>
+      </div>
+
+      <div>
+        <button class="menos" data-id="${it.id}" ${cantidad <= 1 ? 'disabled' : ''}>-</button>
+        <span>${cantidad}</span>
+        <button class="mas" data-id="${it.id}">+</button>
+      </div>
+
+      <div>$${subtotal.toFixed(2)}</div>
+      <button class="eliminar" data-id="${it.id}" style="background:#d9534f;color:white;">🗑️</button>
+    </div>
+  `;
+}).join('');
+
+
+
+      totalEl.textContent = 'Total: $' + total.toFixed(2);
+
+      // --- Eventos ---
+      document.querySelectorAll('.mas').forEach(btn => {
+        btn.addEventListener('click', () => changeCantidad(btn.dataset.id, 1));
+      });
+      document.querySelectorAll('.menos').forEach(btn => {
+        btn.addEventListener('click', () => changeCantidad(btn.dataset.id, -1));
+      });
+      document.querySelectorAll('.eliminar').forEach(btn => {
+        btn.addEventListener('click', () => removeItem(btn.dataset.id));
+      });
+    }
+
+    // --- Cambiar cantidad ---
+    async function changeCantidad(id, delta) {
+      const res = await fetch('/api/cart/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: Number(id), delta })
+      });
+      const j = await res.json();
+      if (j.ok) refresh();
+      else alert(j.message || 'Error al actualizar cantidad');
+    }
+
+    // --- Eliminar ítem ---
+    async function removeItem(id) {
+      if (!confirm('¿Eliminar este producto del carrito?')) return;
+      const res = await fetch(`/api/cart/remove/${id}`, { method: 'DELETE' });
+      const j = await res.json();
+      if (j.ok) refresh();
+      else alert(j.message || 'Error al eliminar producto');
+    }
+
+    // --- Finalizar compra ---
+    document.getElementById('checkout').addEventListener('click', async () => {
+      const r = await fetch('/api/checkout', { method: 'POST' });
+      const j = await r.json();
+      if (j.ok) {
+        alert('Orden creada: ' + j.orderId);
+        location.href = '/';
+      } else {
+        alert(j.message || 'Error');
+      }
+    });
+
+    refresh();
+  </script>
+</body>
+</html>

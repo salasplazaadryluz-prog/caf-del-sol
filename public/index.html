@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tienda de Café</title>
+  <link rel="stylesheet" href="/css/inicio.css">
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+
+  <!-- esta pagina es de info de desarrolladores -->
+ 
+</head>
+<body>
+<header>
+  <h1>Tienda de Café</h1>
+  <nav>
+    
+   
+    <span id="auth-links"></span>
+  </nav>
+</header>
+
+<main>
+  <section id="hero">
+    <h2>Bienvenido a la mejor experiencia del café <strong>CAFÉ DEL SOL</strong></h2>
+  </section>
+
+  <section id="info-proyecto">
+    <h3>Sobre nuestro proyecto</h3>
+    <p>
+      Este proyecto forma parte del curso de programación de software y tiene como objetivo desarrollar 
+      el prototito, con algunas funciones, de una aplicación web funcional para la gestión y venta de productos de café. 
+      Incluye módulos de usuarios, carrito de compras, administración de pedidos y base de datos MySQL.
+    </p>
+    <p>
+        <strong>SENA</strong><br>
+      <strong>Programa:</strong> Técnico en programación de Software<br>
+      <strong>Tecnologías usadas:</strong> HTML, CSS, JavaScript, Node.js, Express, MySQL<br>
+      <strong>Objetivo:</strong> Crear una tienda de café moderna y eficiente para practicar el desarrollo web completo (frontend y backend).
+    </p>
+  </section>
+
+  <section>
+    <h3>Integrantes del grupo</h3>
+    <div id="equipo">
+      <div class="miembro">
+        <img src="/img/Pibe_Valderrama.jpg" alt="Integrante 1">
+        <h4>Adry Luz Salas Plaza</h4>
+        <p>Edad: 31</p>
+        <p>Cel: +57 310 4680856</p>
+      </div>
+      <div class="miembro">
+        <img src="/img/pulga.jpg" alt="Integrante 2">
+        <h4>Jesus Alejandro Miranda Garavito</h4>
+        <p>Edad: 21</p>
+        <p>Cel: +57 323 4034257</p>
+      </div>
+      <div class="miembro">
+        <img src="/img/nazario.jpg" alt="Integrante 3">
+        <h4>Cristian Daniel Builes Verona</h4>
+        <p>Edad: 24</p>
+        <p>Cel: +57 3106921279</p>
+      </div>
+      <div class="miembro">
+        <img src="/img/bicho.jpg" alt="Integrante 4">
+        <h4>Juan Camilo Jiménez Conde</h4>
+        <p>Edad: 25</p>
+        <p>Cel: +57 311 6917528</p>
+      </div>
+      <div class="miembro">
+        <img src="/img/malo.jpg" alt="Integrante 5">
+        <h4>Dayana Margarita Perez Guzman</h4>
+        <p>Edad: 10</p>
+        <p>Cel: +57 314 2884018</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="productos"></section>
+</main>
+
+<script src="/js/main.js"></script>
+
+
+<script>
+    // --- GESTIÓN DE AUTENTICACIÓN EN EL FRONTEND ---
+    const formProduct = document.getElementById('formProduct');
+    const statusDiv = document.getElementById('status');
+
+    formProduct.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formProduct);
+
+      try {
+        const response = await fetch('/api/products', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          statusDiv.textContent = 'Producto agregado exitosamente.';
+          formProduct.reset();
+        } else {
+          statusDiv.textContent = 'Error: ' + result.message;
+        }
+      } catch (error) {
+        statusDiv.textContent = 'Error al conectar con el servidor.';
+      }
+    });
+
+    // --- Gestión de ventas ---
+    const tablaVentasDiv = document.getElementById('tablaVentas');
+    const refreshVentasBtn = document.getElementById('refreshVentas');
+
+    async function cargarVentas() {
+      try {
+        const response = await fetch('/api/ventas');
+        const ventas = await response.json();
+
+        let tablaHTML = '<table><tr><th>ID Venta</th><th>Producto</th><th>Cantidad</th><th>Fecha</th></tr>';
+        ventas.forEach(venta => {
+          tablaHTML += `<tr>
+            <td>${venta.id}</td>
+            <td>${venta.producto}</td>
+            <td>${venta.cantidad}</td>
+            <td>${new Date(venta.fecha).toLocaleString()}</td>
+          </tr>`;
+        });
+        tablaHTML += '</table>';
+
+        tablaVentasDiv.innerHTML = tablaHTML;
+      } catch (error) {
+        tablaVentasDiv.textContent = 'Error al cargar las ventas.';
+      }
+    }
+
+    refreshVentasBtn.addEventListener('click', cargarVentas);
+
+    // Cargar ventas al iniciar
+    cargarVentas();
+  </script>
+        <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    `;
+  }
+  </script>
+</body>
+</html>
+

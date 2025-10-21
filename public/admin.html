@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Panel Admin - Tienda de Café</title>
+  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+
+<body>
+  <!-- ======== ENCABEZADO ======== -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <img src="/img/cafe del sol.png" alt="Logo Café del Sol">
+        <h1>Café del Sol</h1>
+      </div>
+      <nav>
+        <a href="/inicio.html">Inicio</a>
+        <a href="/menu.html">Menú</a>
+        <a href="/adicionales.html">Adicionales</a>
+        <a href="/promos.html">Promociones</a>
+        <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======== CONTENIDO PRINCIPAL ======== -->
+  <main>
+    <h2>Panel de Administración</h2>
+
+    <section id="ventas">
+      <h3>Registro de Ventas</h3>
+      <button id="refreshVentas" class="btn btn-edit">Actualizar</button>
+      <div id="tablaVentas"></div>
+    </section>
+  </main>
+
+  <!-- ======== PIE DE PÁGINA PROMOCIONAL ======== -->
+  <footer class="promo-footer">
+    <h3>¡Gracias por administrar con pasión el mejor café!</h3>
+    <p>Recuerda revisar los pedidos pendientes y mantener el sabor del éxito ☕</p>
+    <div class="promo-icons">
+      <img src="/img/coffee-icon1.png" alt="icono café">
+      <img src="/img/coffee-icon2.png" alt="icono grano">
+      <img src="/img/coffee-icon3.png" alt="icono taza">
+    </div>
+  </footer>
+
+  <!-- ======== SCRIPT PRINCIPAL ======== -->
+  <script>
+  // --- Verificar sesión ---
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user || user.role !== 'admin') {
+    alert('Acceso restringido: solo administradores.');
+    location.href = '/login.html';
+  }
+
+  // --- Mostrar ventas ---
+  async function cargarVentas() {
+    const cont = document.getElementById('tablaVentas');
+    cont.innerHTML = '<p>Cargando ventas...</p>';
+
+    const res = await fetch('/api/admin/orders');
+    const j = await res.json();
+
+    if (!j.ok) {
+      cont.innerHTML = '<p class="error">❌ No se pudieron cargar las ventas.</p>';
+      return;
+    }
+
+    if (!j.orders.length) {
+      cont.innerHTML = '<p>No hay ventas registradas aún.</p>';
+      return;
+    }
+
+    const rows = j.orders.map(o => `
+      <tr class="fila-datos">
+        <td>${o.id}</td>
+        <td>${o.cliente}</td>
+        <td>$${Number(o.total).toFixed(2)}</td>
+        <td>
+          <select onchange="actualizarEstado(${o.id}, this.value)">
+            <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+            <option value="pagado" ${o.status === 'pagado' ? 'selected' : ''}>Pagado</option>
+            <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
+            <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+          </select>
+        </td>
+        <td>${new Date(o.created_at).toLocaleString()}</td>
+      </tr>
+    `).join('');
+
+    cont.innerHTML = `
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  document.getElementById('refreshVentas').addEventListener('click', cargarVentas);
+  cargarVentas();
+
+  // --- Actualizar estado ---
+  async function actualizarEstado(id, nuevoEstado) {
+    const confirmar = confirm(`¿Cambiar el estado del pedido #${id} a "${nuevoEstado}"?`);
+    if (!confirmar) return;
+
+    const res = await fetch(`/api/orders/${id}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: nuevoEstado })
+    });
+
+    const data = await res.json();
+    if (data.ok) {
+      alert(data.message);
+      cargarVentas();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  }
+
+  // --- Logout ---
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    localStorage.removeItem('user');
+    location.href = '/';
+  });
+  </script>
+</body>
+</html>

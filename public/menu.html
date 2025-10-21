@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Menú - Café del Sol ☕</title>
+  <link rel="stylesheet" href="/css/menu.css">
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+
+<body>
+
+  <!-- ======= ENCABEZADO ======= -->
+  <header>
+    <main class="main-wrapper">
+    <div class="nav-container">
+      <div class="logo">
+        <img id="imgmenu" src="/img/cafe del sol.png" alt="Logo Café del Sol" loading="lazy">
+>
+        <h1>Café del Sol</h1>
+      </div>
+
+      <nav>
+        <a href="/menu.html" class="active">Menú</a>
+        <a href="/adicionales.html" class="active">Adicionales</a>
+        <a href="/promos.html" class="active">Promociones</a>
+        <a href="/carrito.html">Carrito</a>
+       <a href="/admin.html">Pedidos</a>
+        <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======= CONTENIDO PRINCIPAL ======= -->
+  <main>
+    <h2>Menú de Productos</h2>
+
+    <!-- Solo visible para admin -->
+    <section id="form-admin" style="display:none;">
+      <h3>Agregar Producto</h3>
+      <form id="productForm">
+        <input type="text" id="nombre" placeholder="Nombre del producto" required>
+        <input type="number" id="precio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="stock" placeholder="Stock inicial" required>
+        <input type="text" id="imagen" placeholder="URL de la imagen">
+        <textarea id="descripcion" placeholder="Descripción del producto"></textarea>
+        <button type="submit" class="btn btn-add">Guardar Producto</button>
+      </form>
+    </section>
+
+    <!-- Formulario de edición -->
+    <section id="editForm" style="display:none;">
+      <h3>Editar Producto</h3>
+      <form id="editProductForm">
+        <input type="hidden" id="editId">
+        <input type="text" id="editNombre" placeholder="Nombre del producto" required>
+        <input type="number" id="editPrecio" placeholder="Precio" step="0.01" required>
+        <input type="number" id="editStock" placeholder="Stock" required>
+        <input type="text" id="editImagen" placeholder="URL de la imagen">
+        <textarea id="editDescripcion" placeholder="Descripción del producto"></textarea>
+        <button type="submit" class="btn btn-edit">Guardar Cambios</button>
+        <button type="button" id="cancelEdit" class="btn btn-delete">Cancelar</button>
+      </form>
+    </section>
+
+    <!-- Contenedor de productos -->
+    <section id="lista"></section>
+  </main>
+
+  <!-- ======= PIE DE PÁGINA ======= -->
+     <!-- ======= PIE DE PÁGINA / PROMOCIÓN ======= -->
+  <footer class="promo-footer">
+    <div class="promo-content">
+      <h3>Algunos de tus envíos pueden ser gratis</h3>
+      <p>Válido desde el 1 de octubre - 30 de octubre 2025</p>
+      <div class="promo-icons">
+        <img src="/img/50off.png" alt="50% off">
+        <img src="/img/50off.png" alt="50% off">
+      </div>
+    </div>
+  </footer>
+
+  <footer>
+    <p>© 2025 <span>Café del Sol</span> — Todos los derechos reservados.</p>
+  </footer>
+</main>
+  <!-- ======= SCRIPT ======= -->
+  <script>
+  // --- Protección de acceso ---
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) {
+    alert('Debes iniciar sesión para acceder a esta sección.');
+    location.href = '/login.html';
+  }
+
+  // Mostrar nombre del usuario en el encabezado
+  const nav = document.querySelector('nav');
+  if (user?.nombre) {
+    const name = document.createElement('span');
+    name.textContent = `👤 ${user.nombre}`;
+    name.classList.add('user-name');
+    nav.insertBefore(name, document.getElementById('logoutBtn'));
+  }
+
+  // Cerrar sesión
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('user');
+    location.href = '/login.html';
+  });
+
+  // Mostrar formulario solo si es admin
+  if (user.role === 'admin') {
+    document.getElementById('form-admin').style.display = 'block';
+  }
+
+  // --- Cargar productos ---
+  async function loadProducts() {
+    const r = await fetch('/api/products');
+    const j = await r.json();
+    const c = document.getElementById('lista');
+
+    if (!j.products || j.products.length === 0) {
+      c.innerHTML = '<p>No hay productos disponibles</p>';
+      return;
+    }
+
+    c.innerHTML = j.products.map(p => `
+      <div class="card">
+        ${p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}">` : ''}
+        <h3>${p.nombre}</h3>
+        <p>${p.descripcion || ''}</p>
+        <p><strong>Precio:</strong> $${p.precio}</p>
+        <p><strong>Stock:</strong> ${p.stock}</p>
+        ${user.role === 'admin'
+          ? `
+            <button class="btn btn-edit" data-id="${p.id}">Editar</button>
+            <button class="btn btn-delete" data-id="${p.id}">Eliminar</button>
+          `
+          : `<button class="btn btn-add" data-id="${p.id}">Agregar al carrito</button>`
+        }
+      </div>
+    `).join('');
+
+    // --- Clientes: agregar al carrito ---
+    if (user.role !== 'admin') {
+      c.querySelectorAll('.btn-add').forEach(b => b.addEventListener('click', async (e) => {
+        const id = Number(e.target.dataset.id);
+        const res = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ user_id: user.id, productId: id, cantidad: 1 })
+        });
+        const j = await res.json();
+        if (j.ok) alert('Producto añadido al carrito');
+        else alert(j.message || 'Error al agregar');
+      }));
+    }
+
+    // --- Admin: eliminar producto ---
+    if (user.role === 'admin') {
+      c.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          const id = e.target.dataset.id;
+          if (confirm('¿Seguro que deseas eliminar este producto?')) {
+            const r = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const j = await r.json();
+            if (j.ok) {
+              alert('Producto eliminado');
+              loadProducts();
+            } else alert(j.message || 'Error al eliminar producto');
+          }
+        });
+      });
+
+      // --- Admin: editar producto ---
+      c.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          const id = e.target.dataset.id;
+          const producto = j.products.find(p => p.id == id);
+          if (producto) {
+            document.getElementById('editForm').style.display = 'block';
+            document.getElementById('editId').value = producto.id;
+            document.getElementById('editNombre').value = producto.nombre;
+            document.getElementById('editPrecio').value = producto.precio;
+            document.getElementById('editStock').value = producto.stock;
+            document.getElementById('editImagen').value = producto.imagen;
+            document.getElementById('editDescripcion').value = producto.descripcion || '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+  }
+
+  // Crear nuevo producto
+  document.getElementById('productForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      nombre: document.getElementById('nombre').value.trim(),
+      descripcion: document.getElementById('descripcion').value.trim(),
+      precio: parseFloat(document.getElementById('precio').value),
+      stock: parseInt(document.getElementById('stock').value),
+      imagen: document.getElementById('imagen').value.trim()
+    };
+    const res = await fetch('/api/products', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    const j = await res.json();
+    if (j.ok) {
+      alert('Producto agregado correctamente');
+      e.target.reset();
+      loadProducts();
+    } else alert(j.message || 'Error al guardar producto');
+  });
+
+  // Editar producto existente
+  document.getElementById('editProductForm')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    const data = {
+      nombre: document.getElementById('editNombre').value.trim(),
+      descripcion: document.getElementById('editDescripcion').value.trim(),
+      precio: parseFloat(document.getElementById('editPrecio').value),
+      stock: parseInt(document.getElementById('editStock').value),
+      imagen: document.getElementById('editImagen').value.trim()
+    };
+    const res = await fetch(`/api/products/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    const j = await res.json();
+    if (j.ok) {
+      alert('Producto actualizado correctamente');
+      document.getElementById('editForm').style.display = 'none';
+      loadProducts();
+    } else alert(j.message || 'Error al actualizar producto');
+  });
+
+  document.getElementById('cancelEdit')?.addEventListener('click', () => {
+    document.getElementById('editForm').style.display = 'none';
+  });
+
+  loadProducts();
+  </script>
+</body>
+</html>

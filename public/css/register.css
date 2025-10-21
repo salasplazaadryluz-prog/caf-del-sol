@@ -1,0 +1,129 @@
+:root {
+      --color-fondo: #f7edeb;
+      --color-card: #ffffff;
+      --color-principal: #a9745a;
+      --color-boton: #b57c5a;
+      --color-texto: #5a3e36;
+      --sombra: 0 6px 15px rgba(0, 0, 0, 0.1);
+      --borde: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--color-fondo);
+    }
+
+    form {
+      background-color: var(--color-card);
+      padding: 2rem;
+      border-radius: var(--borde);
+      box-shadow: var(--sombra);
+      width: 320px;
+      text-align: center;
+      animation: aparecer 0.5s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    form h2 {
+      color: var(--color-texto);
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-size: 0.9rem;
+      color: var(--color-texto);
+      margin-bottom: 0.5rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #f3e5e2;
+      color: var(--color-texto);
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid var(--color-boton);
+      background-color: #f9f3f1;
+    }
+
+    .buttoncreate {
+      width: 100%;
+      background-color: var(--color-boton);
+      color: white;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--sombra);
+    }
+
+    .buttoncreate:hover {
+      background-color: #a96b4c;
+      transform: translateY(-1px);
+    }
+
+    #adminCodeContainer {
+      display: none;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: var(--color-texto);
+      margin-top: 1rem;
+    }
+
+    a {
+      color: var(--color-principal);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+      background-color: #c82333;
+}

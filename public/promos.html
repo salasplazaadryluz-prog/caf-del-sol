@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Promociones - Tienda de Café</title>
+<link rel="stylesheet" href="/css/menu.css">
+<link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+<body>
+  <!-- ======= ENCABEZADO ======= -->
+  <header>
+    
+    <div class="nav-container">
+      <div class="logo">
+        <img id="imgmenu" src="/img/cafe del sol.png" alt="Logo Café del Sol" loading="lazy">
+        <h1>Café del Sol</h1>
+      </div>
+
+      <nav>
+          <a href="/menu.html" class="active">Menú</a>
+          <a href="/adicionales.html">Adicionales</a>
+          <a href="/promos.html">Promociones</a>
+          <a href="/carrito.html">Carrito</a>
+          <a href="/admin.html">Pedidos</a>
+          <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======= CONTENIDO PRINCIPAL ======= -->
+  <main>
+    <h2>Promociones</h2>
+
+    <!-- Formulario solo visible para admin -->
+    <section id="form-admin" class="admin-section" hidden>
+      <h3 id="form-title">Agregar Promoción</h3>
+      <form id="promoForm" novalidate>
+        <input type="hidden" id="promoId" name="promoId">
+
+        <label>
+          <span class="sr-only"></span>
+          <input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+        </label>
+
+        <label>
+          <span class="sr-only"></span>
+          <input type="number" id="precio" name="precio" placeholder="Precio" step="0.01" required>
+        </label>
+
+        <label>
+          <span class="sr-only"></span>
+          <input type="number" id="stock" name="stock" placeholder="Stock disponible" required>
+        </label>
+
+        <label>
+          <span class="sr-only"></span>
+          <input type="text" id="imagen" name="imagen" placeholder="URL de la imagen">
+        </label>
+
+        <label>
+          <span class="sr-only"></span>
+          <textarea id="descripcion" name="descripcion" placeholder="Descripción"></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-add">Guardar Promoción</button>
+          <button type="button" id="cancelarEdit" class="btn btn-delete" hidden>Cancelar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- CONTENEDOR DE PROMOCIONES -->
+    <section id="lista" aria-live="polite" class="cards-wrapper"></section>
+  </main>
+
+  <!-- PIE PROMOCIONAL -->
+  <footer>
+    <div class="promo-footer">
+      <h3>Algunos de tus envíos pueden ser gratis</h3>
+      <p>Válido desde el 1 de octubre - 30 de octubre 2025</p>
+      <div class="promo-icons">
+        <img src="/img/50off.png" alt="50% off" loading="lazy">
+        <img src="/img/50off.png" alt="50% off" loading="lazy">
+      </div>
+      <p style="margin-top:8px; color:#6b4f35; font-size:0.9rem;">© Café del Sol 2025</p>
+    </div>
+  </footer>
+
+<script>
+/* --- Configuración de usuario / roles ---
+   Se acepta tanto 'admin' como 'administrador' (para compatibilidad con distintos seeds).
+*/
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user) {
+  alert('Debes iniciar sesión para acceder a esta sección.');
+  location.href = '/login.html';
+}
+
+// Mostrar nombre del usuario en el encabezado
+  const nav = document.querySelector('nav');
+  if (user?.nombre) {
+    const name = document.createElement('span');
+    name.textContent = `👤 ${user.nombre}`;
+    name.classList.add('user-name');
+    nav.insertBefore(name, document.getElementById('logoutBtn'));
+  }
+
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('user');
+  location.href = '/login.html';
+});
+
+// Considerar ambos valores para admin (mejor compatibilidad)
+const isAdmin = user.role === 'admin' || user.role === 'administrador' || user.role === 'admin_super' || user.role === 'admin_super';
+
+if (isAdmin) {
+  // Mostrar formulario admin (usa hidden/visible en lugar de inline styles)
+  const fa = document.getElementById('form-admin');
+  fa.removeAttribute('hidden');
+  fa.style.display = 'block';
+}
+
+/* --- Cargar promociones --- */
+async function loadPromos() {
+  const res = await fetch('/api/promotions');
+  const data = await res.json();
+  const cont = document.getElementById('lista');
+
+  if (!data || !data.ok) {
+    cont.innerHTML = '<p style="color:#fff;">Error cargando promociones.</p>';
+    return;
+  }
+
+  if (!data.promotions || data.promotions.length === 0) {
+    cont.innerHTML = '<p style="color:#fff;">No hay promociones disponibles</p>';
+    return;
+  }
+
+  cont.innerHTML = data.promotions.map(p => `
+    <article class="card" role="article" aria-label="${escapeHtml(p.nombre)}">
+      ${p.imagen ? `<img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(p.nombre)}" loading="lazy">` : ''}
+      <h3>${escapeHtml(p.nombre)}</h3>
+      <p class="desc">${escapeHtml(p.descripcion || '')}</p>
+      <p class="meta"><strong>Precio:</strong> $${Number(p.precio).toFixed(2)}</p>
+      <p class="meta"><strong>Stock:</strong> ${Number(p.stock)}</p>
+
+      <div class="card-actions">
+        ${
+          isAdmin
+            ? `<button class="btn btn-edit editar" data-id="${p.id}">Editar</button>
+               <button class="btn btn-delete eliminar" data-id="${p.id}">Eliminar</button>`
+            : `<button class="btn btn-add agregar" data-id="${p.id}" ${p.stock <= 0 ? 'disabled' : ''}>
+                 ${p.stock <= 0 ? 'Sin stock' : 'Agregar al carrito'}
+               </button>`
+        }
+      </div>
+    </article>
+  `).join('');
+
+  // --- ADMIN: eliminar y editar ---
+  if (isAdmin) {
+    cont.querySelectorAll('.eliminar').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        const id = e.target.dataset.id;
+        if (!confirm('¿Seguro que deseas eliminar esta promoción?')) return;
+        const r = await fetch(`/api/promotions/${id}`, { method: 'DELETE' });
+        const j = await r.json();
+        if (j.ok) {
+          alert('Promoción eliminada');
+          loadPromos();
+        } else alert(j.message || 'Error al eliminar');
+      });
+    });
+
+    cont.querySelectorAll('.editar').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = e.target.dataset.id;
+        const promo = data.promotions.find(p => p.id == id);
+        if (!promo) return;
+        document.getElementById('promoId').value = promo.id;
+        document.getElementById('nombre').value = promo.nombre;
+        document.getElementById('precio').value = promo.precio;
+        document.getElementById('stock').value = promo.stock;
+        document.getElementById('imagen').value = promo.imagen || '';
+        document.getElementById('descripcion').value = promo.descripcion || '';
+        document.getElementById('form-title').textContent = 'Editar Promoción';
+        const cancelBtn = document.getElementById('cancelarEdit');
+        cancelBtn.hidden = false;
+        cancelBtn.style.display = 'inline-block';
+        // focus first input
+        document.getElementById('nombre').focus();
+      });
+    });
+  }
+
+  // --- CLIENTE: agregar al carrito ---
+  if (!isAdmin) {
+    cont.querySelectorAll('.agregar').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        const id = Number(e.target.dataset.id);
+        const res = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ user_id: user.id, productId: id, cantidad: 1, tipo: 'promo' })
+        });
+        const j = await res.json();
+        if (j.ok) alert('Promoción añadida al carrito');
+        else alert(j.message || 'Error al agregar al carrito');
+      });
+    });
+  }
+}
+
+/* --- Crear o editar promoción --- */
+document.getElementById('promoForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('promoId').value;
+  const nombre = document.getElementById('nombre').value.trim();
+  const descripcion = document.getElementById('descripcion').value.trim();
+  const precio = parseFloat(document.getElementById('precio').value);
+  const stock = parseInt(document.getElementById('stock').value);
+  const imagen = document.getElementById('imagen').value.trim();
+
+  const method = id ? 'PUT' : 'POST';
+  const url = id ? `/api/promotions/${id}` : '/api/promotions';
+
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre, descripcion, precio, imagen, stock })
+  });
+
+  const j = await res.json();
+  if (j.ok) {
+    alert(id ? 'Promoción actualizada' : 'Promoción agregada');
+    e.target.reset();
+    document.getElementById('promoId').value = '';
+    document.getElementById('form-title').textContent = 'Agregar Promoción';
+    const cancelBtn = document.getElementById('cancelarEdit');
+    cancelBtn.hidden = true;
+    cancelBtn.style.display = 'none';
+    loadPromos();
+  } else {
+    alert(j.message || 'Error al guardar promoción');
+  }
+});
+
+// Cancelar edición
+document.getElementById('cancelarEdit')?.addEventListener('click', () => {
+  document.getElementById('promoForm').reset();
+  document.getElementById('promoId').value = '';
+  document.getElementById('form-title').textContent = 'Agregar Promoción';
+  const cancelBtn = document.getElementById('cancelarEdit');
+  cancelBtn.hidden = true;
+  cancelBtn.style.display = 'none';
+});
+
+loadPromos();
+
+/* --- helper: escape simple html to avoid injection when inserting into DOM strings --- */
+function escapeHtml(str) {
+  if (!str && str !== 0) return '';
+  return String(str)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;');
+}
+</script>
+</body>
+</html>
