@@ -1,0 +1,276 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  background-image: url(imagen/fondo_B.png);
+  background-size: 300px;
+  
+  
+}
+
+.menu-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 20px 60px;
+  border-radius: 0 0 40px 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Fondo marrón con imagen de fondo */
+  background-image: 
+    linear-gradient(to bottom, #ffffff 70%, white 30%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+.adicionales-pedidos {
+  display: flex;
+  justify-content: space-between; /* distribuye los elementos */
+  align-items: center;
+  padding: 20px 40px;
+  color: white;
+  font-weight: bold;
+}
+/* Variables de Color (Asegúrate de que estas estén al inicio de tu CSS) */
+:root {
+    /* ... otras variables ... */
+    --color-button-promo: #fff; /* Fondo blanco para Promo */
+    --color-button-default: #ffffff; /* Fondo negro para Café/Adicionales */
+    --color-text-active: #000; /* Texto negro para la activa */
+    --color-text-inactive: #000000; /* Texto blanco para las inactivas */
+    /* ... */
+}
+
+/* 1. Contenedor de las Pestañas */
+.category-tabs {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones */
+    margin-bottom: 20px;
+}
+
+/* 2. Estilo Base del Botón */
+.tab {
+    /* Padding para dar el tamaño (ajustado para que se vean grandes) */
+    padding: 12px 25px; 
+    border: none;
+    /* Borde de píldora (radio muy grande) */
+    border-radius: 50px; 
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    
+    /* Configuración por defecto (inactiva: fondo negro, texto blanco) */
+    background-color: var(--color-button-default);
+    color: var(--color-text-inactive);
+    
+    /* Para que el texto se vea bien centrado */
+    display: inline-block;
+    white-space: nowrap; 
+}
+
+/* 3. Estilo del Botón Activo (Promo) */
+.tab.active {
+    /* Estilo Activo: fondo blanco, texto negro */
+    background-color: var(--color-button-promo); 
+    color: var(--color-text-active);
+}
+/* 1. Contenedor de las Pestañas */
+.category-tabs {
+
+    gap: 100px; /* Espacio entre los botones */
+    margin-bottom: 10px;
+    
+    /* MODIFICACIÓN CLAVE: Alinea todos los elementos a la derecha */
+    justify-content: flex-end;
+    
+    margin-right: 600px;
+}
+
+/* El resto de las reglas CSS para .tab permanecen igual */
+/* ... */
+/* 1. Modifica la regla base del botón */
+.tab {
+    /* ... otros estilos del botón ... */
+    
+    /* Habilita el desplazamiento relativo */
+    position: relative;
+}
+
+/* 2. Reglas para mover cada botón individualmente (Ejemplos) */
+
+/* Mover el botón "Promo" 10 píxeles a la derecha */
+.category-tabs .tab:nth-child(1) {
+    left: 130px; 
+    top: -25px;
+    padding: 20px 50px; 
+
+    /* Aumenta este valor para hacer el texto más grande */
+    font-size: 1.1rem;
+    border-radius: 15px;
+}
+
+/* Mover el botón "Café" 5 píxeles hacia abajo y 20 píxeles a la izquierda */
+.category-tabs .tab:nth-child(2) {
+    top: -25px; 
+    left: 260px; /* Usa valores negativos para mover a la izquierda */
+    padding: 20px 50px; 
+
+    /* Aumenta este valor para hacer el texto más grande */
+    font-size: 1.1rem;
+    border-radius: 15px;
+}
+
+/* Mover el botón "Adicionales" 15 píxeles hacia arriba */
+.category-tabs .tab:nth-child(3) {
+    top: -25px; /* Usa valores negativos para mover hacia arriba */
+    left: 400px;
+    padding: 20px 50px; 
+
+    /* Aumenta este valor para hacer el texto más grande */
+    font-size: 1.1rem;
+    border-radius: 15px;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu-left img {
+  width: 32px;
+  height: 52px;
+}
+
+.menu-left h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: right;
+}
+
+.user-info {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.user-info .role {
+  font-weight: bold;
+}
+
+.user-photo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background-color: red; /* fondo rojo detrás si no hay imagen */
+}
+/* Sección adicionales*/
+.adicionales-section1 {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin: 20px;
+  
+}
+.A{
+width: 300px;   /* ancho */
+height: 180px;  /* altura */
+border-radius: 10px;
+
+
+}
+.adicionales-section2 {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin: 20px;
+}
+.B{
+width: 300px;   /* ancho */
+height: 180px;  /* altura */
+border-radius: 10px;
+transform: scale(0.4. 0); /* 1.2 = 120% más grande */
+}
+
+
+  
+.adicionales-section3 {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin: 20px;
+}
+.D{
+  width: 00px;   /* ancho */
+height: 180px;  /* altura */
+border-radius: 10px;
+   
+}
+.C{
+width: 00px;   /* ancho */
+height: 180px;  /* altura */
+border-radius: 10px;
+
+   
+}
+
+.adicionales-card {
+  background-color: #fff;
+  border-radius: 15px;
+  color: #000;
+  text-align: center;
+  padding: 20px;
+  width: 360px;
+}
+
+.adicionales-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.adicionales-card h3 {
+  margin-top: 10px;
+}
+.descuento h2{
+  font-size: 38px;
+  text-align: right;
+}
+.descuento p{
+  font-size: 20px;
+  text-align: center;
+}
+.descuento {
+  background-color: white;
+  width: 820px;
+  padding: 20px;
+
+}
+.descuento-section {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  padding: 20px;
+  text-align: right;
+  
+}
+.descuento img{
+  width: 100px;
+  border-radius: 10px;
+  align-content: space-between;
+}
