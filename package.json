@@ -1,7 +1,7 @@
 {
   "name": "cafe_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000c\u0000a\u0000f\u0000-\u0000d\u0000e\u0000l\u0000-\u0000s\u0000o\u0000l\u0000\r\u0000 \u0000",
   "main": "server.js",
   "dependencies": {
     "accepts": "^2.0.0",
@@ -132,12 +132,21 @@
     "wrappy": "^1.0.2",
     "xtend": "^4.0.2"
   },
- "scripts": {
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salasplazaadryluz-prog/caf-del-sol.git"
+  },
+  "bugs": {
+    "url": "https://github.com/salasplazaadryluz-prog/caf-del-sol/issues"
+  },
+  "homepage": "https://github.com/salasplazaadryluz-prog/caf-del-sol#readme"
 }
