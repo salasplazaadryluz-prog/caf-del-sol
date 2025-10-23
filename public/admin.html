@@ -17,6 +17,7 @@
         <h1>Café del Sol</h1>
       </div>
       <nav>
+        <a href="/inicio.html" class="active">Inicio</a>
         <a href="/inicio.html">Inicio</a>
         <a href="/menu.html">Menú</a>
         <a href="/adicionales.html">Adicionales</a>
@@ -76,36 +77,41 @@
     }
 
     const rows = j.orders.map(o => `
-      <tr class="fila-datos">
-        <td>${o.id}</td>
-        <td>${o.cliente}</td>
-        <td>$${Number(o.total).toFixed(2)}</td>
-        <td>
-          <select onchange="actualizarEstado(${o.id}, this.value)">
-            <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-            <option value="pagado" ${o.status === 'pagado' ? 'selected' : ''}>Pagado</option>
-            <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
-            <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
-          </select>
-        </td>
-        <td>${new Date(o.created_at).toLocaleString()}</td>
-      </tr>
-    `).join('');
+  <tr class="fila-datos">
+    <td>${o.id}</td>
+    <td>${o.cliente}</td>
+    <td>$${Number(o.total).toFixed(2)}</td>
+    <td>
+      <select onchange="actualizarEstado(${o.id}, this.value)">
+        <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+        <option value="pagado" ${o.status === 'pagado' ? 'selected' : ''}>Pagado</option>
+        <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
+        <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+      </select>
+    </td>
+    <td>${new Date(o.created_at).toLocaleString()}</td>
+    <td>
+      <button class="btn btn-print" onclick="imprimirFactura(${o.id})">🧾 Imprimir</button>
+    </td>
+  </tr>
+`).join('');
 
-    cont.innerHTML = `
-      <table class="tabla-datos">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Total</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `;
+   cont.innerHTML = `
+  <table class="tabla-datos">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Total</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+        <th>Factura</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+`;
+
   }
 
   document.getElementById('refreshVentas').addEventListener('click', cargarVentas);
