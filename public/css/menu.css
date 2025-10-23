@@ -447,3 +447,14 @@ footer {
 .fila-datos {
   color: #000000;
 }
+
+.btn-print {
+  background-color: #ffb84d;
+  color: #3a2a17;
+  font-weight: bold;
+}
+
+.btn-print:hover {
+  background-color: #e0a13a;
+}
+
