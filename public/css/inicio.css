@@ -35,6 +35,14 @@
       background-color: white;
       border-radius: 3px;
     }
+    .logo-grid img{
+      font-size: 28px;
+      display: grid;
+      grid-template-columns: repeat(2, 12px);
+      grid-gap: 4px;
+      margin-left: 5px;
+    }
+
 
     .user-info {
       display: flex;
@@ -213,4 +221,8 @@ img[src] {
   opacity: 1;
 }
 
+.logo_cafe{
+  border-radius: 30px;
+}
 
+ 
