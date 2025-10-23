@@ -484,8 +484,9 @@ footer {
   background-color: #922d2d;
 }
 
-.form-adminds{
+#form-title{
   color: #000000;
+  text-align: center;
   
 }
  

@@ -34,16 +34,21 @@
     <h2>Adicionales</h2>
 
     <!-- Solo visible para admin -->
-    <div id="form-admin" style="display:none; margin-bottom:20px;">
-      <h3CL class="form-adminds">Agregar Adicional</h3>
-      <form id="adicionalForm">
+    <section id="form-admin" class="admin-section" hidden>
+      <h3 id="form-title">Agregar Promoción</h3>
+      <form id="promoForm" novalidate>
+        <input type="hidden" id="promoId" name="promoId">
+  
+
         <input type="text" id="nombre" placeholder="Nombre del adicional" required>
         <input type="number" id="precio" placeholder="Precio" step="0.01" required>
         <input type="number" id="stock" placeholder="Stock inicial" required>
         <input type="text" id="imagen" placeholder="URL de la imagen">
         <textarea id="descripcion" placeholder="Descripción del adicional"></textarea>
         <button type="submit" class="btn btn-add">Guardar Adicional</button>
-      </form>
+      
+        </form>
+    </section>
     </div>
 
     <!-- Formulario de edición -->
