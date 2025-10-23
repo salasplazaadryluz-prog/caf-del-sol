@@ -617,21 +617,61 @@ app.delete('/api/orders/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Primero verifica si el pedido existe
-    const [rows] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
-    if (rows.length === 0) {
+    // Verificar si el pedido existe
+    const [pedido] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    if (pedido.length === 0) {
       return res.status(404).json({ ok: false, message: 'Pedido no encontrado' });
     }
 
-    // Elimina el pedido
+    // Eliminar los items del pedido primero
+    await pool.query('DELETE FROM order_items WHERE order_id = ?', [id]);
+
+    // Luego eliminar el pedido
     await pool.query('DELETE FROM orders WHERE id = ?', [id]);
 
-    res.json({ ok: true, message: `Pedido #${id} eliminado correctamente` });
+    res.json({ ok: true, message: `Pedido #${id} y sus productos fueron eliminados correctamente` });
   } catch (err) {
     console.error('Error al eliminar pedido:', err);
     res.status(500).json({ ok: false, message: 'Error al eliminar pedido', error: err.message });
   }
 });
+
+// --- Obtener pedido por ID (para imprimir factura) ---
+app.get('/api/orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Obtener datos del pedido
+    const [orders] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    if (orders.length === 0) {
+      return res.status(404).json({ ok: false, message: 'Pedido no encontrado' });
+    }
+
+    const pedido = orders[0];
+
+    // Obtener los productos del pedido
+    const [items] = await pool.query(
+      `SELECT oi.*, p.nombre 
+       FROM order_items oi
+       LEFT JOIN products p ON oi.product_id = p.id
+       WHERE oi.order_id = ?`,
+      [id]
+    );
+
+    // Devolver el pedido y sus items
+    res.json({
+      ok: true,
+      order: {
+        ...pedido,
+        items
+      }
+    });
+  } catch (err) {
+    console.error('Error al obtener pedido:', err);
+    res.status(500).json({ ok: false, message: 'Error al obtener pedido', error: err.message });
+  }
+});
+
 
 
 // --- Obtener todos los productos (normales, promociones y adicionales) ---

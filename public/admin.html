@@ -112,8 +112,11 @@ async function cargarVentas() {
       </td>
       <td>${new Date(o.created_at).toLocaleString()}</td>
       <td>
-        <button class="btn btn-print" data-id="${o.id}">🧾</button>
-        <button class="btn btn-delete" onclick="eliminarPedido(${o.id})">🗑️ Eliminar</button>
+        <td>
+  <button class="btn btn-print" onclick="imprimirFactura(${o.id})">🧾 Imprimir</button>
+  <button class="btn btn-delete" onclick="eliminarPedido(${o.id})">🗑️ Eliminar</button>
+</td>
+
       </td>
     </tr>
   `).join('');
@@ -173,23 +176,20 @@ async function actualizarEstado(id, nuevoEstado) {
 
 // --- Eliminar pedido ---
 async function eliminarPedido(id) {
-  const conf = confirm(`¿Seguro que deseas eliminar el pedido #${id}? Esta acción no se puede deshacer.`);
-  if (!conf) return;
+  const confirmar = confirm(`¿Seguro que deseas eliminar el pedido #${id}? Esta acción no se puede deshacer.`);
+  if (!confirmar) return;
 
-  try {
-    const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
-    const data = await res.json();
-    if (data.ok) {
-      alert('🗑️ Pedido eliminado correctamente.');
-      cargarVentas();
-    } else {
-      alert('❌ No se pudo eliminar: ' + (data.message || 'Error desconocido.'));
-    }
-  } catch (err) {
-    console.error('Error al eliminar pedido:', err);
-    alert('❌ Error de conexión al eliminar pedido.');
+  const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+  const data = await res.json();
+
+  if (data.ok) {
+    alert(data.message);
+    cargarVentas(); // refresca la tabla
+  } else {
+    alert('Error: ' + data.message);
   }
 }
+
 
 // --- Imprimir factura ---
 async function imprimirFactura(id) {
