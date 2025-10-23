@@ -157,8 +157,8 @@
     .promo-card {
       background: #fff;
       color: #4b2e0f;
-      margin: 10px 70px;
-      padding: 20px 450px 25px 20px;
+      
+      padding: 20px auto 25px 20px;
       border-radius: 12px;
       width: 160px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
