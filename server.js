@@ -636,13 +636,20 @@ app.delete('/api/orders/:id', async (req, res) => {
   }
 });
 
-// --- Obtener pedido por ID (para imprimir factura) ---
+// --- Obtener pedido por ID (para imprimir factura con nombre del cliente) ---
 app.get('/api/orders/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Obtener datos del pedido
-    const [orders] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    // Obtener datos del pedido + nombre del cliente
+    const [orders] = await pool.query(
+      `SELECT o.*, u.nombre AS cliente
+       FROM orders o
+       LEFT JOIN users u ON o.user_id = u.id
+       WHERE o.id = ?`,
+      [id]
+    );
+
     if (orders.length === 0) {
       return res.status(404).json({ ok: false, message: 'Pedido no encontrado' });
     }
@@ -658,7 +665,6 @@ app.get('/api/orders/:id', async (req, res) => {
       [id]
     );
 
-    // Devolver el pedido y sus items
     res.json({
       ok: true,
       order: {

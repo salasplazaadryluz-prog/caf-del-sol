@@ -111,7 +111,7 @@ async function cargarVentas() {
         </select>
       </td>
       <td>${new Date(o.created_at).toLocaleString()}</td>
-      <td>
+      
         <td>
   <button class="btn btn-print" onclick="imprimirFactura(${o.id})">🧾 Imprimir</button>
   <button class="btn btn-delete" onclick="eliminarPedido(${o.id})">🗑️ Eliminar</button>
@@ -199,6 +199,7 @@ async function imprimirFactura(id) {
     if (!data.ok) return alert('❌ No se pudo obtener la información del pedido.');
 
     const pedido = data.order;
+    const cliente = data.order_items ? data.order_items[0]?.cliente : 'Desconocido';
     const productos = pedido.items || [];
 
     const facturaHTML = `
@@ -213,7 +214,7 @@ async function imprimirFactura(id) {
       </head><body>
         <h1>Café del Sol</h1>
         <h2>Factura #${pedido.id}</h2>
-        <p><strong>Cliente:</strong> ${pedido.cliente}</p>
+        <p><strong>Cliente:</strong> ${pedido.cliente || 'Desconocido'}</p>
         <p><strong>Fecha:</strong> ${new Date(pedido.created_at).toLocaleString()}</p>
         <table>
           <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
@@ -222,8 +223,8 @@ async function imprimirFactura(id) {
               <tr>
                 <td>${p.nombre}</td>
                 <td>${p.cantidad}</td>
-                <td>$${Number(p.precio).toFixed(2)}</td>
-                <td>$${(p.cantidad * p.precio).toFixed(2)}</td>
+                <td>$${Number(p.precio_unit).toFixed(2)}</td>
+                <td>$${(p.cantidad * p.precio_unit).toFixed(2)}</td>
               </tr>`).join('')}
           </tbody>
           <tfoot><tr><td colspan="3">Total</td><td>$${Number(pedido.total).toFixed(2)}</td></tr></tfoot>
