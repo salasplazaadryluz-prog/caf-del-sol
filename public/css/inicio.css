@@ -224,5 +224,17 @@ img[src] {
 .logo_cafe{
   border-radius: 30px;
 }
+.iconimg{
+  border-radius: 30px;
+}
 
- 
+/*lupa*/
+.search-box .iconing {
+  width: 30px;          /* Tamaño de la imagen */
+  height: 30px;
+  border-radius: 50%;   /* La hace redonda */
+  object-fit: cover;    /* Asegura que no se deforme */
+  background-color: #fff; /* Fondo (puedes cambiarlo o quitarlo) */
+  padding: 4px;         /* Espaciado interno opcional */
+}
+
