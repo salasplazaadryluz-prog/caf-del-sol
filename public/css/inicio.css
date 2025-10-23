@@ -155,26 +155,36 @@
     }
 
     .promo-card {
-      background: #fff;
-      color: #4b2e0f;
-      
-      padding: 20px auto 25px 20px;
-      border-radius: 12px;
-      width: 160px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      margin: 15px 90px;
+      justify-content: center;
+      gap: 15px;
+      align-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      display: flex;
     }
     .promo-card2{
-      display: flex;
-      border: 2px solid black;
-      padding: 10px 20px;
+      margin: 15px 50px;
+      padding: 0px 120px 0px 0px;
+      gap: 15px;
       align-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      display: block;
+      border: 4px solid red;
+    }
+    .promo-card2 h4{
+      margin-top: 0px;
+      background-color: red;
+      padding: auto;
+      border-radius: 0 0 15px 15px;
     }
 
     a{
+      
       text-decoration: none;
       color: #4b2e0f;
       font-weight: 700;
-      justify-content: space-between;
     }
 
     .promo-card img {
