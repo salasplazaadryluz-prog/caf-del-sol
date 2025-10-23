@@ -612,75 +612,26 @@ app.put('/api/orders/:id/status', async (req, res) => {
   }
 });
 
-// --- Imprimir factura ---
-async function imprimirFactura(id) {
+// --- Eliminar pedido ---
+app.delete('/api/orders/:id', async (req, res) => {
   try {
-    const res = await fetch(`/api/orders/${id}`);
-    const data = await res.json();
-    if (!data.ok) return alert('❌ No se pudo obtener la información del pedido.');
+    const { id } = req.params;
 
-    const pedido = data.order;
-    const productos = pedido.items || [];
+    // Primero verifica si el pedido existe
+    const [rows] = await pool.query('SELECT * FROM orders WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ ok: false, message: 'Pedido no encontrado' });
+    }
 
-    // Generar contenido de factura
-    const facturaHTML = `
-      <html>
-        <head>
-          <title>Factura #${pedido.id}</title>
-          <style>
-            body { font-family: 'Poppins', sans-serif; padding: 20px; color: #3a2a17; }
-            h1 { text-align: center; color: #6f4e37; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-            th { background-color: #f2e1c6; }
-            .total { font-weight: bold; }
-            .footer { margin-top: 30px; text-align: center; font-size: 0.9rem; color: #555; }
-          </style>
-        </head>
-        <body>
-          <h1>Café del Sol</h1>
-          <h2>Factura #${pedido.id}</h2>
-          <p><strong>Cliente:</strong> ${pedido.cliente}</p>
-          <p><strong>Fecha:</strong> ${new Date(pedido.created_at).toLocaleString()}</p>
+    // Elimina el pedido
+    await pool.query('DELETE FROM orders WHERE id = ?', [id]);
 
-          <table>
-            <thead>
-              <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr>
-            </thead>
-            <tbody>
-              ${productos.map(p => `
-                <tr>
-                  <td>${p.nombre}</td>
-                  <td>${p.cantidad}</td>
-                  <td>$${Number(p.precio).toFixed(2)}</td>
-                  <td>$${(p.cantidad * p.precio).toFixed(2)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-            <tfoot>
-              <tr class="total"><td colspan="3">Total</td><td>$${Number(pedido.total).toFixed(2)}</td></tr>
-            </tfoot>
-          </table>
-
-          <div class="footer">
-            <p>☕ Gracias por tu compra en <strong>Café del Sol</strong></p>
-            <p>Visítanos en www.cafedelsol.com o nuestras redes sociales.</p>
-          </div>
-        </body>
-      </html>
-    `;
-
-    // Abrir ventana de impresión
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(facturaHTML);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
+    res.json({ ok: true, message: `Pedido #${id} eliminado correctamente` });
   } catch (err) {
-    console.error('Error al imprimir factura:', err);
-    alert('❌ Error al generar la factura.');
+    console.error('Error al eliminar pedido:', err);
+    res.status(500).json({ ok: false, message: 'Error al eliminar pedido', error: err.message });
   }
-}
+});
 
 
 // --- Obtener todos los productos (normales, promociones y adicionales) ---

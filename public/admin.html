@@ -18,7 +18,6 @@
       </div>
       <nav>
         <a href="/inicio.html" class="active">Inicio</a>
-        <a href="/inicio.html">Inicio</a>
         <a href="/menu.html">Menú</a>
         <a href="/adicionales.html">Adicionales</a>
         <a href="/promos.html">Promociones</a>
@@ -34,11 +33,11 @@
     <section id="ventas">
       <h3>Registro de Ventas</h3>
       <button id="refreshVentas" class="btn btn-edit">Actualizar</button>
-      <div id="tablaVentas"></div>
+      <div id="tablaVentas" aria-live="polite"></div>
     </section>
   </main>
 
-  <!-- ======== PIE DE PÁGINA PROMOCIONAL ======== -->
+  <!-- ======== PIE PROMOCIONAL ======== -->
   <footer class="promo-footer">
     <h3>¡Gracias por administrar con pasión el mejor café!</h3>
     <p>Recuerda revisar los pedidos pendientes y mantener el sabor del éxito ☕</p>
@@ -51,98 +50,198 @@
 
   <!-- ======== SCRIPT PRINCIPAL ======== -->
   <script>
-  // --- Verificar sesión ---
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (!user || user.role !== 'admin') {
-    alert('Acceso restringido: solo administradores.');
-    location.href = '/login.html';
-  }
+// --- util: acepta varios nombres de rol posibles ---
+function isAdminRole(role) {
+  if (!role) return false;
+  const r = String(role).toLowerCase();
+  return r === 'admin' || r === 'administrador' || r === 'admin_super' || r === 'adminsuper';
+}
 
-  // --- Mostrar ventas ---
-  async function cargarVentas() {
-    const cont = document.getElementById('tablaVentas');
-    cont.innerHTML = '<p>Cargando ventas...</p>';
+// --- Verificar sesión ---
+const user = JSON.parse(localStorage.getItem('user') || 'null');
+if (!user || !isAdminRole(user.role)) {
+  alert('Acceso restringido: solo administradores.');
+  location.href = '/login.html';
+}
 
+// --- Logout ---
+document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+  try {
+    await fetch('/api/logout', { method: 'POST' });
+  } catch {}
+  localStorage.removeItem('user');
+  location.href = '/';
+});
+
+// --- Cargar ventas ---
+async function cargarVentas() {
+  const cont = document.getElementById('tablaVentas');
+  cont.innerHTML = '<p>Cargando ventas...</p>';
+
+  let j;
+  try {
     const res = await fetch('/api/admin/orders');
-    const j = await res.json();
-
-    if (!j.ok) {
-      cont.innerHTML = '<p class="error">❌ No se pudieron cargar las ventas.</p>';
-      return;
-    }
-
-    if (!j.orders.length) {
-      cont.innerHTML = '<p>No hay ventas registradas aún.</p>';
-      return;
-    }
-
-    const rows = j.orders.map(o => `
-  <tr class="fila-datos">
-    <td>${o.id}</td>
-    <td>${o.cliente}</td>
-    <td>$${Number(o.total).toFixed(2)}</td>
-    <td>
-      <select onchange="actualizarEstado(${o.id}, this.value)">
-        <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-        <option value="pagado" ${o.status === 'pagado' ? 'selected' : ''}>Pagado</option>
-        <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
-        <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
-      </select>
-    </td>
-    <td>${new Date(o.created_at).toLocaleString()}</td>
-    <td>
-      <button class="btn btn-print" onclick="imprimirFactura(${o.id})">🧾 Imprimir</button>
-    </td>
-  </tr>
-`).join('');
-
-   cont.innerHTML = `
-  <table class="tabla-datos">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Total</th>
-        <th>Estado</th>
-        <th>Fecha</th>
-        <th>Factura</th>
-      </tr>
-    </thead>
-    <tbody>${rows}</tbody>
-  </table>
-`;
-
+    j = await res.json();
+  } catch {
+    cont.innerHTML = '<p class="error">❌ Error conectando al servidor.</p>';
+    return;
   }
 
-  document.getElementById('refreshVentas').addEventListener('click', cargarVentas);
-  cargarVentas();
+  if (!j.ok || !Array.isArray(j.orders)) {
+    cont.innerHTML = '<p class="error">❌ No se pudieron cargar las ventas.</p>';
+    return;
+  }
 
-  // --- Actualizar estado ---
-  async function actualizarEstado(id, nuevoEstado) {
-    const confirmar = confirm(`¿Cambiar el estado del pedido #${id} a "${nuevoEstado}"?`);
-    if (!confirmar) return;
+  if (!j.orders.length) {
+    cont.innerHTML = '<p>No hay ventas registradas aún.</p>';
+    return;
+  }
 
+  const rows = j.orders.map(o => `
+    <tr class="fila-datos">
+      <td>${o.id}</td>
+      <td>${o.cliente}</td>
+      <td>$${Number(o.total).toFixed(2)}</td>
+      <td>
+        <select data-id="${o.id}" class="select-estado">
+          <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="pagado" ${o.status === 'pagado' ? 'selected' : ''}>Pagado</option>
+          <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
+          <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+        </select>
+      </td>
+      <td>${new Date(o.created_at).toLocaleString()}</td>
+      <td>
+        <button class="btn btn-print" data-id="${o.id}">🧾</button>
+        <button class="btn btn-delete" onclick="eliminarPedido(${o.id})">🗑️ Eliminar</button>
+      </td>
+    </tr>
+  `).join('');
+
+  cont.innerHTML = `
+    <table class="tabla-datos">
+      <thead>
+        <tr>
+          <th>ID</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  // Listeners
+  cont.querySelectorAll('.select-estado').forEach(sel => {
+    sel.addEventListener('change', e => {
+      const id = e.target.dataset.id;
+      actualizarEstado(id, e.target.value);
+    });
+  });
+
+  cont.querySelectorAll('.btn-print').forEach(btn => {
+    btn.addEventListener('click', e => imprimirFactura(e.target.dataset.id));
+  });
+
+  cont.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', e => eliminarPedido(e.target.dataset.id));
+  });
+}
+
+document.getElementById('refreshVentas')?.addEventListener('click', cargarVentas);
+cargarVentas();
+
+// --- Actualizar estado ---
+async function actualizarEstado(id, nuevoEstado) {
+  if (!confirm(`¿Cambiar el estado del pedido #${id} a "${nuevoEstado}"?`)) return;
+
+  try {
     const res = await fetch(`/api/orders/${id}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: nuevoEstado })
     });
-
     const data = await res.json();
     if (data.ok) {
-      alert(data.message);
+      alert('✅ Estado actualizado');
       cargarVentas();
     } else {
-      alert('Error: ' + data.message);
+      alert('❌ ' + (data.message || 'Error actualizando estado'));
     }
+  } catch {
+    alert('❌ Error de conexión');
   }
+}
 
-  // --- Logout ---
-  document.getElementById('logoutBtn').addEventListener('click', async () => {
-    await fetch('/api/logout', { method: 'POST' });
-    localStorage.removeItem('user');
-    location.href = '/';
-  });
-  </script>
+// --- Eliminar pedido ---
+async function eliminarPedido(id) {
+  const conf = confirm(`¿Seguro que deseas eliminar el pedido #${id}? Esta acción no se puede deshacer.`);
+  if (!conf) return;
+
+  try {
+    const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.ok) {
+      alert('🗑️ Pedido eliminado correctamente.');
+      cargarVentas();
+    } else {
+      alert('❌ No se pudo eliminar: ' + (data.message || 'Error desconocido.'));
+    }
+  } catch (err) {
+    console.error('Error al eliminar pedido:', err);
+    alert('❌ Error de conexión al eliminar pedido.');
+  }
+}
+
+// --- Imprimir factura ---
+async function imprimirFactura(id) {
+  try {
+    const res = await fetch(`/api/orders/${id}`);
+    const data = await res.json();
+    if (!data.ok) return alert('❌ No se pudo obtener la información del pedido.');
+
+    const pedido = data.order;
+    const productos = pedido.items || [];
+
+    const facturaHTML = `
+      <html><head><title>Factura #${pedido.id}</title>
+      <style>
+        body { font-family: sans-serif; padding: 20px; }
+        h1 { text-align:center; color:#6f4e37; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th,td { border:1px solid #ccc; padding:8px; text-align:center; }
+        th { background:#f2e1c6; }
+      </style>
+      </head><body>
+        <h1>Café del Sol</h1>
+        <h2>Factura #${pedido.id}</h2>
+        <p><strong>Cliente:</strong> ${pedido.cliente}</p>
+        <p><strong>Fecha:</strong> ${new Date(pedido.created_at).toLocaleString()}</p>
+        <table>
+          <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+          <tbody>
+            ${productos.map(p => `
+              <tr>
+                <td>${p.nombre}</td>
+                <td>${p.cantidad}</td>
+                <td>$${Number(p.precio).toFixed(2)}</td>
+                <td>$${(p.cantidad * p.precio).toFixed(2)}</td>
+              </tr>`).join('')}
+          </tbody>
+          <tfoot><tr><td colspan="3">Total</td><td>$${Number(pedido.total).toFixed(2)}</td></tr></tfoot>
+        </table>
+        <p style="text-align:center;margin-top:20px;">☕ ¡Gracias por tu compra!</p>
+      </body></html>
+    `;
+
+    const win = window.open('', '_blank');
+    win.document.write(facturaHTML);
+    win.document.close();
+    win.print();
+  } catch (err) {
+    console.error(err);
+    alert('❌ Error al generar la factura.');
+  }
+}
+</script>
+
 </body>
 </html>
