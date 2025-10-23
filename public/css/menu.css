@@ -225,7 +225,7 @@ footer {
 }
 .promo-footer h3 { color: #3b200b; font-size: 1.05rem; margin: 0 0 6px; font-weight:700; }
 .promo-footer p { color: #6b4f35; margin:0 0 8px; font-size:.9rem; }
-.promo-footer .promo-icons img { width:50px; margin:0 6px; vertical-align:middle; transition:transform .12s; }
+.promo-footer .promo-icons img { width:120px; margin:0 6px; vertical-align:middle; transition:transform .12s; }
 .promo-footer .promo-icons img:hover { transform:scale(1.06); }
 
 /* ======== RESPONSIVE ======== */
