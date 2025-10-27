@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="css/inicio.css" />
 
   <style>
-   
+
   </style>
 </head>
 
@@ -17,7 +17,7 @@
     <div class="logo-grid">
       <div></div><div></div><div></div><div></div>
     </div>
-     <p>Algunos de tus envíos pueden ser gratis — <strong>Válido hasta 30 Febrero 2025</strong></p>
+    <p>Algunos de tus envíos pueden ser gratis — <strong>Válido hasta 30 Febrero 2025</strong></p>
     <div class="user-info">
       <div>
         <div id="userName">Usuario</div>
@@ -26,26 +26,22 @@
     </div>
   </header>
 
-  
-   
- 
-
   <div class="search-box">
     <img class="logo_cafe" src="img/cafe del sol.png" alt="logo" width="24" style="margin-right:8px;">
     <input type="text" placeholder="Buscar...">
-     <button><img class="iconimg" src="img/LUPA.png" alt="Buscar"></button>
+    <button><img class="iconimg" src="img/LUPA.png" alt="Buscar"></button>
   </div>
 
-  <div class="buttons">
+<div class="buttons">
   <!-- MENÚ -->
   <a href="/menu.html" class="btn-nav">
-    <img src="img/images.png" alt="Cafés" id="menu-img">
+    <img src="img/cafe del sol.png" alt="Cafés" class="menu-img">
     MENÚ
   </a>
 
   <!-- ADICIONALES -->
   <a href="/adicionales.html" class="btn-nav">
-    <img src="img/images.png" alt="Adicionales" id="adicionales-img">
+    <img src="img/adicionales.jpg" alt="Adicionales" class="menu-img">
     ADICIONALES
   </a>
 </div>
@@ -88,7 +84,7 @@
     </div>
   </footer>
 
- <script>
+<script>
   // Mostrar datos del usuario logueado
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   if (user && user.nombre) {
