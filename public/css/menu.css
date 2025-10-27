@@ -232,7 +232,7 @@ footer {
  
 }
 .img2{
- padding: 15px 15px 15px 15px;
+ padding: 25px 25px 25px 25px;
  position: relative;
  left: -40px; 
  border-radius: 50%;
@@ -240,7 +240,7 @@ footer {
 
 .promo-footer h3 { color: #3b200b; font-size: 1.05rem; margin: 0 0 6px; font-weight:700; }
 .promo-footer p { color: #6b4f35; margin:0 0 8px; font-size:.9rem; }
-.promo-footer .promo-icons img { width:120px; margin:0 6px; vertical-align:middle; transition:transform .12s; }
+.promo-footer .promo-icons img {position: relative; left:-40px; padding: 25px 25px 25px 25px; border-radius: 80%; width:120px; margin:0 6px; vertical-align:middle; transition:transform .12s; }
 .promo-footer .promo-icons img:hover { transform:scale(1.06); }
 
 /* ======== RESPONSIVE ======== */
@@ -398,7 +398,7 @@ main h2, main h3 {
   color: white;
   padding: 0.8rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 600;justify-self: start;
 }
 
 .tabla-datos td {
@@ -489,6 +489,7 @@ footer {
   text-align: center;
   
 }
+
  
 
 
