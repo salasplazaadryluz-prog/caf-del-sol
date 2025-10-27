@@ -31,6 +31,24 @@
     <div id="items"></div>
     <h3 id="total"></h3>
     <button id="checkout">Pagar</button>
+    <!-- Ventana modal de método de pago -->
+<div id="modalPago" class="modal">
+  <div class="modal-content">
+    <h3>Selecciona tu método de pago</h3>
+    <select id="metodoPago">
+      <option value="">-- Selecciona --</option>
+      <option value="efectivo">Efectivo</option>
+      <option value="tarjeta">Tarjeta</option>
+      <option value="nequi">Nequi</option>
+      <option value="daviplata">Daviplata</option>
+    </select>
+    <div class="modal-buttons">
+      <button id="confirmarPago">Confirmar</button>
+      <button id="cancelarPago">Cancelar</button>
+    </div>
+  </div>
+</div>
+
   </main>
 
   <script>
@@ -117,16 +135,42 @@ c.innerHTML = j.items.map(it => {
     }
 
     // --- Finalizar compra ---
-    document.getElementById('checkout').addEventListener('click', async () => {
-      const r = await fetch('/api/checkout', { method: 'POST' });
-      const j = await r.json();
-      if (j.ok) {
-        alert('Orden creada: ' + j.orderId);
-        location.href = '/';
-      } else {
-        alert(j.message || 'Error');
-      }
-    });
+  // --- Crear ventana flotante ---
+
+const modal = document.getElementById('modalPago');
+const confirmarBtn = document.getElementById('confirmarPago');
+const cancelarBtn = document.getElementById('cancelarPago');
+const checkoutBtn = document.getElementById('checkout');
+
+//mostrar y ocultar modal al dar click en pagar
+document.getElementById('checkout').addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+//cerrar modal al dar click en cancelar
+cancelarBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+confirmarBtn.addEventListener('click', async () => {
+  const metodo = document.getElementById('metodoPago').value;
+  if (!metodo) return alert('Selecciona un método de pago.');
+
+  const r = await fetch('/api/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ metodo_pago: metodo })
+  });
+
+  const j = await r.json();
+  if (j.ok) {
+    alert(`✅ Pedido creado con método: ${metodo.toUpperCase()}`);
+    modal.style.display = 'none';
+    location.href = '/inicio.html';
+  } else {
+    alert(j.message || 'Error al procesar el pago.');
+  }
+});
 
     refresh();
   </script>

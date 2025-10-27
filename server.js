@@ -479,8 +479,9 @@ app.post('/api/checkout', ensureAuthenticated, async (req, res) => {
     // Separar productos y promociones
     const prodIds = cart.filter(i => i.productId).map(i => i.productId);
     const promoIds = cart.filter(i => i.promoId).map(i => i.promoId);
+    const adicionalIds = cart.filter(i => i.adicionalId).map(i => i.adicionalId);
 
-    let rowsProducts = [], rowsPromos = [];
+    let rowsProducts = [], rowsPromos = [], rowsAdicionales = [];
 
     if (prodIds.length)
       [rowsProducts] = await conn.query(
@@ -491,14 +492,10 @@ app.post('/api/checkout', ensureAuthenticated, async (req, res) => {
       [rowsPromos] = await conn.query(
         `SELECT id, precio, stock FROM promotions WHERE id IN (${promoIds.map(()=>'?').join(',')}) FOR UPDATE`, promoIds
       );
-    // --- Dentro de /api/checkout ---
-const adicionalIds = cart.filter(i => i.adicionalId).map(i => i.adicionalId);
-let rowsAdicionales = [];
 
 if (adicionalIds.length)
   [rowsAdicionales] = await conn.query(
-    `SELECT id, precio, stock FROM adicionales WHERE id IN (${adicionalIds.map(()=>'?').join(',')}) FOR UPDATE`,
-    adicionalIds
+    `SELECT id, precio, stock FROM adicionales WHERE id IN (${adicionalIds.map(()=>'?').join(',')}) FOR UPDATE`, adicionalIds
   );
 
 // Calcular total y validar stock
@@ -516,10 +513,13 @@ for (const item of cart) {
 }
 
 // Crear orden
+const { metodo_pago } = req.body; // 👈 lo recibimos del cliente
+
 const [rOrder] = await conn.query(
-  'INSERT INTO orders (user_id, total) VALUES (?,?)',
-  [req.session.user.id, total]
+  'INSERT INTO orders (user_id, total, metodo_pago) VALUES (?,?,?)',
+  [req.session.user.id, total, metodo_pago || 'No especificado']
 );
+
 const orderId = rOrder.insertId;
 
 // Insertar items y descontar stock
