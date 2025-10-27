@@ -1,4 +1,4 @@
- body {
+body {
       font-family: 'Montserrat', sans-serif;
       background-color: #4b2e0f;
       background-image: url('/img/Fondo.png');
@@ -122,6 +122,9 @@
       display: block;
       margin: 0 auto 6px;
     }
+#menu-img{
+  width: 110px;
+}
 
     .promo-h2{
       color: white;
@@ -140,11 +143,11 @@
       background-color: #fff;
       justify-content: space-between;
       align-content: center;
-      margin: 40px 150px;
+      margin: 20px 320px;
     }
 
     .promo-cards {
-      margin: 15px 90px;
+      margin: 15px 80px;
       justify-content: center;
       gap: 15px;
       align-content: center;
@@ -154,7 +157,7 @@
     }
 
     .promo-card {
-      margin: 15px 90px;
+      margin: 15px 80px;
       justify-content: center;
       gap: 15px;
       align-content: center;
@@ -163,11 +166,12 @@
       display: flex;
     }
     .promo-card2{
-      margin: 15px 50px;
-      padding: 0px 120px 0px 0px;
-      gap: 15px;
+      margin: 15px 40px;
+      padding: 0px 40px 0px 0px;
+      gap: 20px;
       align-content: center;
-      margin-top: 10px;
+      border-radius: 30px;
+      margin-top: 15px;
       flex-wrap: wrap;
       display: block;
       border: 4px solid red;
@@ -176,14 +180,13 @@
       margin-top: 0px;
       background-color: red;
       padding: auto;
-      border-radius: 0 0 15px 15px;
+      border-radius: 15px 0px 15px 7.5px;
     }
 
     a{
-      
       text-decoration: none;
       color: #4b2e0f;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .promo-card img {
@@ -233,7 +236,7 @@
     button img.iconimg {
       background: transparent;       /* o background: transparent; */
       border: none;
-      width: 20px;
+      width:30px;
       display: block;
       border-radius: 25px;
       padding: 0;
@@ -242,14 +245,26 @@
 
 .btn-nav img,
 .promo-card img {
-  width: 140px;
-  height: 140px;
+  width: 90px;
+  height: 90px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 22px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: transform 0.3s;
+  transition: transform 0.2s;
 }
-
+/* controla el hover de menu y adicionales con imagen */
+.btn-nav img, .menu-img{
+  width: 190px;
+  height: 190px;
+}
+.btn-nav, .menu-img{
+  width: 180px;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+} /* Hasta aqui */
 .btn-nav img:hover,
 .promo-card img:hover {
   transform: scale(1.05);
@@ -267,14 +282,14 @@ img[src] {
   border-radius: 30px;
 }
 .iconimg{
-  border-radius: 30px;
+  border-radius: 70px;
 }
 
 /*lupa*/
 .search-box .iconing {
   width: 30px;          /* Tamaño de la imagen */
   height: 30px;
-  border-radius: 50%;   /* La hace redonda */
+  border-radius: 70%;   /* La hace redonda */
   object-fit: cover;    /* Asegura que no se deforme */
   background-color: #fff; /* Fondo (puedes cambiarlo o quitarlo) */
   padding: 4px;         /* Espaciado interno opcional */

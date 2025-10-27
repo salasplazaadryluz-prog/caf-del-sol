@@ -62,7 +62,7 @@ header{
   padding: 10px 20px;
   position: sticky;
   top: 0;
-   border-radius: 0 0 25px 25px;
+  border-radius: 0 0 25px 25px;
   z-index: 40;
   box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
@@ -213,7 +213,7 @@ footer {
   padding: 0;
   background: transparent;
 }
-
+/* Footer de adicionales */
 .promo-footer {
   background: linear-gradient(180deg, var(--promo-bg-start), var(--promo-bg-end));
   border-top: 2px solid #d2b48c;
@@ -225,22 +225,21 @@ footer {
   border-radius: 10px;
 }
 .img1{
- padding: 25px 25px 25px 25px;
- position: relative;
- left: -75px; 
- border-radius: 50%;
- 
+  padding: 25px 25px 25px 25px;
+  position: relative;
+  left: -75px; 
+  border-radius: 50%;
 }
 .img2{
- padding: 15px 15px 15px 15px;
- position: relative;
- left: -40px; 
- border-radius: 50%;
+  padding: 15px 15px 15px 15px;
+  position: relative;
+  left: -40px; 
+  border-radius: 50%;
 }
 
 .promo-footer h3 { color: #3b200b; font-size: 1.05rem; margin: 0 0 6px; font-weight:700; }
 .promo-footer p { color: #6b4f35; margin:0 0 8px; font-size:.9rem; }
-.promo-footer .promo-icons img { width:120px; margin:0 6px; vertical-align:middle; transition:transform .12s; }
+.promo-footer .promo-icons img { width:120px; margin:0 6px; vertical-align:middle; transition:transform .12s; border-radius: 50px;}
 .promo-footer .promo-icons img:hover { transform:scale(1.06); }
 
 /* ======== RESPONSIVE ======== */
@@ -489,9 +488,3 @@ footer {
   text-align: center;
   
 }
- 
-
-
-
-
-
