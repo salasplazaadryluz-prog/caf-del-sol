@@ -109,7 +109,6 @@ body {
       padding: 90px 180px;
       text-align: center;
       text-decoration: none;
-      width: 140px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
     }
@@ -309,7 +308,6 @@ img[src] {
       padding: 40px 100px;
       text-align: center;
       text-decoration: none;
-      width: 140px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
     }
