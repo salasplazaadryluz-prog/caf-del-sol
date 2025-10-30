@@ -119,13 +119,11 @@ body {
     }
 
     .btn-nav img {
-      width: 120px;
+      width: 180px;
       display: block;
       margin: 0 auto 6px;
     }
-#menu-img{
-  width: 110px;
-}
+
 
     .promo-h2{
       color: white;
@@ -191,7 +189,7 @@ body {
     }
 
     .promo-card img {
-      width: 50px;
+      width: 180px;
     }
 
     footer {
@@ -246,8 +244,8 @@ body {
 
 .btn-nav img,
 .promo-card img {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 22px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -260,7 +258,7 @@ body {
 }
 .btn-nav, .menu-img{
   width: 180px;
-  height: 190px;
+  height: 180px;
   object-fit: cover;
   border-radius: 22px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -308,7 +306,7 @@ img[src] {
       color: #4b2e0f;
       font-weight: 700;
       border-radius: 12px;
-      padding: 10px 25px;
+      padding: 40px 100px;
       text-align: center;
       text-decoration: none;
       width: 140px;
@@ -321,38 +319,11 @@ img[src] {
     }
 
     .btn-nav img {
-      width: 55px;
+      width: 90px;
       display: block;
       margin: 0 auto 6px;
     }
-
-    .promos {
-      text-align: center;
-      margin-top: 25px;
-      color: #fff;
-    }
-
-    .promo-cards {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .promo-card {
-      background: #ffffff;
-      color: #4b2e0f;
-      padding: 65px;
-      border-radius: 12px;
-      width: 210px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    }
-
-    .promo-card img {
-      width: 70px;
-    }
-
+    
     footer {
       text-align: center;
       margin-top: auto;
@@ -403,8 +374,8 @@ img[src] {
 
 .btn-nav img,
 .promo-card img {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
