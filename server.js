@@ -139,6 +139,7 @@ console.error(err);
 res.status(500).json({ ok: false, message: 'Error del servidor' });
 }
 });
+
 // Logout
 app.post('/api/logout', (req, res) => {
 req.session.destroy(err => {

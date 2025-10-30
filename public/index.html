@@ -82,76 +82,9 @@
 <script src="/js/main.js"></script>
 
 
-<script>
-    // --- GESTIÓN DE AUTENTICACIÓN EN EL FRONTEND ---
-    const formProduct = document.getElementById('formProduct');
-    const statusDiv = document.getElementById('status');
 
-    formProduct.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(formProduct);
-
-      try {
-        const response = await fetch('/api/products', {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          statusDiv.textContent = 'Producto agregado exitosamente.';
-          formProduct.reset();
-        } else {
-          statusDiv.textContent = 'Error: ' + result.message;
-        }
-      } catch (error) {
-        statusDiv.textContent = 'Error al conectar con el servidor.';
-      }
-    });
-
-    // --- Gestión de ventas ---
-    const tablaVentasDiv = document.getElementById('tablaVentas');
-    const refreshVentasBtn = document.getElementById('refreshVentas');
-
-    async function cargarVentas() {
-      try {
-        const response = await fetch('/api/ventas');
-        const ventas = await response.json();
-
-        let tablaHTML = '<table><tr><th>ID Venta</th><th>Producto</th><th>Cantidad</th><th>Fecha</th></tr>';
-        ventas.forEach(venta => {
-          tablaHTML += `<tr>
-            <td>${venta.id}</td>
-            <td>${venta.producto}</td>
-            <td>${venta.cantidad}</td>
-            <td>${new Date(venta.fecha).toLocaleString()}</td>
-          </tr>`;
-        });
-        tablaHTML += '</table>';
-
-        tablaVentasDiv.innerHTML = tablaHTML;
-      } catch (error) {
-        tablaVentasDiv.textContent = 'Error al cargar las ventas.';
-      }
-    }
-
-    refreshVentasBtn.addEventListener('click', cargarVentas);
-
-    // Cargar ventas al iniciar
-    cargarVentas();
-  </script>
-        <th>Cliente</th>
-            <th>Total</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    `;
-  }
+  
+    
   </script>
 </body>
 </html>
