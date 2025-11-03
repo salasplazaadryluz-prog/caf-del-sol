@@ -331,11 +331,6 @@ app.delete('/api/adicionales/:id', async (req, res) => {
   }
 });
 
-
-
-
-
-
 // --- Carrito en sesión ---
 
 // Agregar producto o promoción al carrito
@@ -637,6 +632,7 @@ app.delete('/api/orders/:id', async (req, res) => {
   }
 });
 
+
 // --- Obtener pedido por ID (para imprimir factura con nombre del cliente) ---
 app.get('/api/orders/:id', async (req, res) => {
   try {
@@ -678,8 +674,6 @@ app.get('/api/orders/:id', async (req, res) => {
     res.status(500).json({ ok: false, message: 'Error al obtener pedido', error: err.message });
   }
 });
-
-
 
 // --- Obtener todos los productos (normales, promociones y adicionales) ---
 app.get('/api/productos', async (req, res) => {

@@ -140,10 +140,6 @@ async function cargarVentas() {
     });
   });
 
-  cont.querySelectorAll('.btn-print').forEach(btn => {
-    btn.addEventListener('click', e => imprimirFactura(e.target.dataset.id));
-  });
-
   cont.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', e => eliminarPedido(e.target.dataset.id));
   });
@@ -196,11 +192,15 @@ async function imprimirFactura(id) {
   try {
     const res = await fetch(`/api/orders/${id}`);
     const data = await res.json();
-    if (!data.ok) return alert('❌ No se pudo obtener la información del pedido.');
+
+    if (!data.ok) {
+      console.log('Respuesta del servidor:', data);
+      return alert('❌ No se pudo obtener la información del pedido.');
+    }
 
     const pedido = data.order;
-    const cliente = data.order_items ? data.order_items[0]?.cliente : 'Desconocido';
     const productos = pedido.items || [];
+    const cliente = pedido.cliente || 'Desconocido'; // <- así es correcto ahora
 
     const facturaHTML = `
       <html><head><title>Factura #${pedido.id}</title>
@@ -214,7 +214,7 @@ async function imprimirFactura(id) {
       </head><body>
         <h1>Café del Sol</h1>
         <h2>Factura #${pedido.id}</h2>
-        <p><strong>Cliente:</strong> ${pedido.cliente || 'Desconocido'}</p>
+        <p><strong>Cliente:</strong> ${cliente}</p>
         <p><strong>Fecha:</strong> ${new Date(pedido.created_at).toLocaleString()}</p>
         <table>
           <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
@@ -242,6 +242,7 @@ async function imprimirFactura(id) {
     alert('❌ Error al generar la factura.');
   }
 }
+
 </script>
 
 </body>
