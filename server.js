@@ -698,6 +698,34 @@ app.get('/api/productos', async (req, res) => {
   }
 });
 
+//pedidos por usuario
+// --- Obtener pedidos de un usuario específico ---
+app.get('/api/orders/user/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Pedidos con datos del cliente 
+    const [orders] = await pool.query(
+      `SELECT o.*, u.nombre AS cliente
+       FROM orders o
+       LEFT JOIN users u ON o.user_id = u.id
+       WHERE o.user_id = ?
+       ORDER BY o.created_at DESC`,
+      [userId]
+    );
+
+    if (!orders.length) {
+      return res.json({ ok: true, orders: [] });
+    }
+
+    res.json({ ok: true, orders });
+  } catch (err) {
+    console.error('Error al obtener pedidos del usuario:', err);
+    res.status(500).json({ ok: false, message: 'Error al obtener pedidos del usuario' });
+  }
+});
+
+
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));

@@ -26,7 +26,8 @@
         <a href="/adicionales.html" class="active">Adicionales</a>
         <a href="/promos.html" class="active">Promociones</a>
         <a href="/carrito.html">Carrito</a>
-       <a href="/admin.html">Pedidos</a>
+         <a href="/mis_pedidos.html" class="solo-cliente">Mis pedidos</a>
+       <a href="/admin.html" class="solo-admin">Pedidos</a>
         <button id="logoutBtn" class="logout">Cerrar sesión</button>
       </nav>
     </div>
@@ -102,6 +103,8 @@
     name.classList.add('user-name');
     nav.insertBefore(name, document.getElementById('logoutBtn'));
   }
+
+  
 
   // Cerrar sesión
   document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -246,5 +249,44 @@
 
   loadProducts();
   </script>
+  <script>
+async function configurarNavbar() {
+  try {
+    const res = await fetch('/api/me');
+    const data = await res.json();
+
+    if (!data.ok || !data.user) {
+      // Si no hay sesión, redirigir a login
+      location.href = '/login.html';
+      return;
+    }
+
+    const user = data.user;
+    console.log('Usuario en sesión:', user);
+
+    // Mostrar/Ocultar enlaces según el rol
+    document.querySelectorAll('.solo-admin').forEach(el => {
+      el.style.display = user.role === 'admin' ? 'inline-block' : 'none';
+    });
+
+    document.querySelectorAll('.solo-cliente').forEach(el => {
+      el.style.display = user.role === 'cliente' ? 'inline-block' : 'none';
+    });
+
+    // Botón de logout
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      location.href = '/login.html';
+    });
+
+  } catch (err) {
+    console.error('Error al cargar sesión:', err);
+    location.href = '/login.html';
+  }
+}
+
+configurarNavbar();
+</script>
+
 </body>
 </html>

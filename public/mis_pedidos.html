@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Pedidos - Café del Sol</title>
+  <link rel="stylesheet" href="/css/menu.css" />
+  <link rel="icon" type="image/png" href="/img/cafe del sol.png">
+</head>
+
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <img src="/img/cafe del sol.png" alt="Logo Café del Sol">
+        <h1>Mis Pedidos ☕</h1>
+      </div>
+      <nav>
+        <a href="/inicio.html">Inicio</a>
+        <a href="/menu.html">Menú</a>
+        <a href="/promos.html">Promos</a>
+        <a href="adicionales.html">Adicionales</a>
+        <a href="/carrito.html">Carrito</a>
+        <button id="logoutBtn" class="logout">Cerrar sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h2>Historial de Pedidos</h2>
+    <div id="contenedorPedidos"></div>
+  </main>
+
+  <footer>
+    <p>☕ Café del Sol — Gracias por tu preferencia</p>
+  </footer>
+
+  <script>
+  // --- Verificar sesión ---
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user || !user.id) {
+    alert('Debes iniciar sesión para ver tus pedidos.');
+    location.href = '/login.html';
+  }
+
+  document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    localStorage.removeItem('user');
+    location.href = '/';
+  });
+
+  // --- Cargar pedidos del usuario ---
+  async function cargarPedidos() {
+    const cont = document.getElementById('contenedorPedidos');
+    cont.innerHTML = '<p>Cargando tus pedidos...</p>';
+
+    try {
+      const res = await fetch(`/api/orders/user/${user.id}`);
+      const data = await res.json();
+
+      if (!data.ok) throw new Error('Error al obtener pedidos.');
+
+      const pedidos = data.orders || [];
+      if (!pedidos.length) {
+        cont.innerHTML = '<p>No tienes pedidos registrados aún ☕</p>';
+        return;
+      }
+
+      const html = pedidos.map(p => `
+        <div class="pedido-card">
+          <h3>Pedido #${p.id}</h3>
+          <p><strong>Fecha:</strong> ${new Date(p.created_at).toLocaleString()}</p>
+          <p><strong>Total:</strong> $${Number(p.total).toFixed(2)}</p>
+          <p><strong>Estado:</strong> ${p.status}</p>
+          <button onclick="imprimirFactura(${p.id})">🧾 Imprimir</button>
+        </div>
+      `).join('');
+
+      cont.innerHTML = html;
+    } catch (err) {
+      console.error(err);
+      document.getElementById('contenedorPedidos').innerHTML = '<p>Error al cargar tus pedidos.</p>';
+    }
+  }
+
+  cargarPedidos();
+
+  // --- Imprimir factura ---
+  async function imprimirFactura(id) {
+    try {
+      const res = await fetch(`/api/orders/${id}`);
+      const data = await res.json();
+
+      if (!data.ok) return alert('❌ No se pudo obtener la información del pedido.');
+
+      const pedido = data.order;
+      const productos = pedido.items || [];
+      const cliente = pedido.cliente || user.nombre || 'Cliente';
+
+      const facturaHTML = `
+        <html><head><title>Factura #${pedido.id}</title>
+        <style>
+          body { font-family: sans-serif; padding: 20px; }
+          h1 { text-align:center; color:#6f4e37; }
+          table { width:100%; border-collapse:collapse; margin-top:20px; }
+          th,td { border:1px solid #ccc; padding:8px; text-align:center; }
+          th { background:#f2e1c6; }
+        </style>
+        </head><body>
+          <h1>Café del Sol</h1>
+          <h2>Factura #${pedido.id}</h2>
+          <p><strong>Cliente:</strong> ${cliente}</p>
+          <p><strong>Fecha:</strong> ${new Date(pedido.created_at).toLocaleString()}</p>
+          <table>
+            <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              ${productos.map(p => `
+                <tr>
+                  <td>${p.nombre}</td>
+                  <td>${p.cantidad}</td>
+                  <td>$${Number(p.precio_unit).toFixed(2)}</td>
+                  <td>$${(p.cantidad * p.precio_unit).toFixed(2)}</td>
+                </tr>`).join('')}
+            </tbody>
+            <tfoot><tr><td colspan="3">Total</td><td>$${Number(pedido.total).toFixed(2)}</td></tr></tfoot>
+          </table>
+          <p style="text-align:center;margin-top:20px;">☕ ¡Gracias por tu compra!</p>
+        </body></html>
+      `;
+
+      const win = window.open('', '_blank');
+      win.document.write(facturaHTML);
+      win.document.close();
+      win.print();
+    } catch (err) {
+      console.error(err);
+      alert('❌ Error al generar la factura.');
+    }
+  }
+  </script>
+
+  <style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #f9f7f4; }
+  header { background: #6f4e37; color: white; padding: 10px 20px; display:flex; align-items:center; justify-content:space-between; }
+  .logo img { width: 40px; margin-right: 10px; vertical-align: middle; }
+  main { padding: 20px; max-width: 800px; margin: auto; }
+  .pedido-card { background: #fff; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  button { background: #6f4e37; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+  button:hover { background: #5a3d2a; }
+  footer { text-align:center; background: #eee; padding: 10px; margin-top: 20px; }
+  </style>
+</body>
+</html>
