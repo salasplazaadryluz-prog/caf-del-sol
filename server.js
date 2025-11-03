@@ -654,13 +654,26 @@ app.get('/api/orders/:id', async (req, res) => {
     const pedido = orders[0];
 
     // Obtener los productos del pedido
-    const [items] = await pool.query(
-      `SELECT oi.*, p.nombre 
-       FROM order_items oi
-       LEFT JOIN products p ON oi.product_id = p.id
-       WHERE oi.order_id = ?`,
-      [id]
-    );
+   const [items] = await pool.query(
+  `SELECT 
+      oi.id,
+      oi.order_id,
+      oi.product_id,
+      p.nombre AS producto_nombre,
+      oi.promo_id,
+      pr.nombre AS promo_nombre,
+      oi.adicional_id,
+      a.nombre AS adicional_nombre,
+      oi.cantidad,
+      oi.precio_unit
+   FROM order_items oi
+   LEFT JOIN products p ON oi.product_id = p.id
+   LEFT JOIN promotions pr ON oi.promo_id = pr.id
+   LEFT JOIN adicionales a ON oi.adicional_id = a.id
+   WHERE oi.order_id = ?`,
+  [id]
+);
+
 
     res.json({
       ok: true,

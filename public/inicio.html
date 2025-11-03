@@ -17,7 +17,8 @@
     <div class="logo-grid">
       <div></div><div></div><div></div><div></div>
     </div>
-    <p>Algunos de tus envíos pueden ser gratis — <strong>Válido hasta 30 Febrero 2025</strong></p>
+    <p class="solo-cliente" id="vista_cliente">Algunos de tus envíos pueden ser gratis — <strong>Válido hasta 30 Febrero 2025</strong></p>
+    <a href="/admin.html" class="solo-admin" id="enlace_admin">Pedidos</a>
     <div class="user-info">
       <div>
         <div id="userName">Usuario</div>
@@ -34,20 +35,29 @@
 
 
 <div class="buttons">
-  <!-- MENÚ -->
+ 
   <a href="/menu.html" class="btn-nav">
-    <img src="img/images.png" alt="Cafés" id="menu-img" >
+    <img src="img/images.png" alt="Cafés" id="menu-img">
     MENÚ
   </a>
 
-  <!-- ADICIONALES -->
   <a href="/adicionales.html" class="btn-nav">
-    <img src="img/images.png" alt="Adicionales" id="adicionales-img" >
+    <img src="img/images.png" alt="Adicionales" id="adicionales-img">
     ADICIONALES
+  </a>
+
+  <a href="/promos.html" class="btn-nav solo-admin">
+    <img src="img/images.png" alt="Promos" id="promo1-img">
+    PROMOCIONES
   </a>
 </div>
 
 
+  </div>
+
+
+
+<div class="solo-cliente">
 <section class="promos">
   <h2 class="promo-h2">¡Tenemos Promos!</h2>
   <div class="promo-cards">
@@ -74,6 +84,7 @@
   </div>
   <p><a href="/promos.html" style="color:#fff;text-decoration:underline;">Revisa nuestras promos</a></p>
 </section>
+</div>
 
 
 
@@ -88,6 +99,7 @@
   </footer>
 
 <script>
+  
   // Mostrar datos del usuario logueado
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   if (user && user.nombre) {
@@ -157,6 +169,45 @@ cargarProductos();
     localStorage.removeItem('user');
     location.href = '/login.html';
   });
+
+</script>
+<script>
+async function configurarNavbar() {
+  try {
+    const res = await fetch('/api/me');
+    const data = await res.json();
+
+    if (!data.ok || !data.user) {
+      // Si no hay sesión, redirigir a login
+      location.href = '/login.html';
+      return;
+    }
+
+    const user = data.user;
+    console.log('Usuario en sesión:', user);
+
+    // Mostrar/Ocultar enlaces según el rol
+    document.querySelectorAll('.solo-admin').forEach(el => {
+      el.style.display = user.role === 'admin' ? 'inline-block' : 'none';
+    });
+
+    document.querySelectorAll('.solo-cliente').forEach(el => {
+      el.style.display = user.role === 'cliente' ? 'inline-block' : 'none';
+    });
+
+    // Botón de logout
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      location.href = '/login.html';
+    });
+
+  } catch (err) {
+    console.error('Error al cargar sesión:', err);
+    location.href = '/login.html';
+  }
+}
+
+configurarNavbar();
 
 </script>
 

@@ -205,7 +205,7 @@ async function loadPromos() {
         const res = await fetch('/api/cart/add', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ user_id: user.id, productId: id, cantidad: 1, tipo: 'promo' })
+          body: JSON.stringify({ user_id: user.id, promoId: id, cantidad: 1 })
         });
         const j = await res.json();
         if (j.ok) alert('Promoción añadida al carrito');

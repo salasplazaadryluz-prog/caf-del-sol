@@ -117,7 +117,12 @@
             <tbody>
               ${productos.map(p => `
                 <tr>
-                  <td>${p.nombre}</td>
+                 <td>
+                    ${p.producto_nombre || p.promo_nombre || p.adicional_nombre || '(Sin nombre)'}
+                    ${p.promo_nombre ? '<br><small>(Promoción)</small>' : ''}
+                    ${p.adicional_nombre ? '<br><small>(Adicional)</small>' : ''}
+                  </td>
+
                   <td>${p.cantidad}</td>
                   <td>$${Number(p.precio_unit).toFixed(2)}</td>
                   <td>$${(p.cantidad * p.precio_unit).toFixed(2)}</td>
