@@ -561,6 +561,79 @@ select {
   border-radius: 10px;
 }
 
+.mis_pedidos {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f9f7f4;
+}
+
+/* Encabezado */
+.mis_pedidos header {
+  background: #6f4e37;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mis_pedidos .logo img {
+  width: 40px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Contenido principal */
+.mis_pedidos main {
+  padding: 20px;
+  max-width: 450px;
+  margin: auto;
+  color: #5a3d2a;
+}
+
+/* Tarjeta de pedido */
+.mis_pedidos .pedido-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Botones */
+.mis_pedidos button {
+  background: #6f4e37;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mis_pedidos button:hover {
+  background: #5a3d2a;
+}
+
+/* Pie de página */
+.mis_pedidos footer {
+  text-align: center;
+  background: #eee;
+  padding: 10px;
+  margin-top: 20px;
+}
+.mis_pedidos .logout{
+  background-color: var(--btn-delete);
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  transition: background-color .18s ease, transform .12s ease;
+}
+
 
 
 
