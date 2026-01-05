@@ -38,6 +38,28 @@
 
       <button type="submit">Iniciar sesión</button>
     </form>
+      
+    </section>
+
+    <section class="card">
+      <h1>¡Bienvenido!</h1>
+
+      <form action="/login" method="POST" class="form">
+        <label class="input-pill">
+          <span class="icon">✉️</span>
+          <input name="email" type="email" placeholder="hola@sitioincreible.com" required />
+        </label>
+
+        <label class="input-pill">
+          <span class="icon">🔑</span>
+          <input id="password" name="password" type="password" placeholder="Contraseña" required />
+        </label>
+
+        <div class="actions">
+          <a class="link-small" href="#">¿Olvidaste tu contraseña?</a>
+          <button class="btn-primary" type="submit"><a href="/public/inicio.html">iniciar sesion</a></button>
+        </div>
+      </form>
 
     <div class="extra-links">
       <p>¿Olvidaste tu contraseña?</p>
